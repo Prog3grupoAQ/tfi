@@ -2,8 +2,12 @@ import { Router } from "express";
 
 export const userRoutes = Router();
 
-userRoutes.get('/', ( req, res )=>{
-    res.send({"msg":"ok"})
+userRoutes.post('/login', ( req, res )=>{
+    try {
+        
+    } catch (error) {
+        res.status(500).send(error.error)
+    }
 })
 
 userRoutes.get("/test",(req,res)=>{
