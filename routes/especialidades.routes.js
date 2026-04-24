@@ -50,7 +50,7 @@ especialidadesRoutes.post('/crear', async( req, res )=>{
     }
 })
 
-especialidadesRoutes.put('/:id/activar', async( req, res )=>{
+especialidadesRoutes.post('/:id/activar', async( req, res )=>{
     try{
         const { id } = req.params;
         let query = "UPDATE especialidades SET activo = 1 WHERE id_especialidad = ? ";
@@ -63,7 +63,7 @@ especialidadesRoutes.put('/:id/activar', async( req, res )=>{
     }
 })
 
-especialidadesRoutes.put('/:id/desactivar', async( req, res )=>{
+especialidadesRoutes.post('/:id/desactivar', async( req, res )=>{
     try{
         const { id } = req.params;
         let query = "UPDATE especialidades SET activo = 0 WHERE id_especialidad = ? ";
