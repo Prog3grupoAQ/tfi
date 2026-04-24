@@ -1,0 +1,18 @@
+{
+  "name": "tp_final",
+  "version": "1.0.0",
+  "description": "Trabajo de programacion 3",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "dev": "node --env-file=.env --watch index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "express-validators": "^1.0.4",
+    "mysql2": "^3.22.1"
+  }
+}
