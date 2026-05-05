@@ -2,6 +2,7 @@ import { Router } from "express";
 
 export const userRoutes = Router();
 
+//TODO: devolver el jwt para iniciar sesion
 userRoutes.post('/login', ( req, res )=>{
     try {
         
@@ -9,6 +10,7 @@ userRoutes.post('/login', ( req, res )=>{
         res.status(500).send(error.error)
     }
 })
+
 
 userRoutes.get("/test",(req,res)=>{
     res.send({"msg":"esto es un test"})
