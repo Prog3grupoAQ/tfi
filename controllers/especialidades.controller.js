@@ -1,5 +1,6 @@
 
 import { Database } from "../database/conexion.js";
+import { editarEspecialidadService } from "../services/especialidades.service.js";
 
 export const buscarEspecialidad = async( req, res )=>{
     try{
@@ -46,28 +47,17 @@ export const crearEspecialidad = async( req, res )=>{
     }
 }
 
-export const activarEspecialidad =  async( req, res )=>{
-    try{
-        const { id } = req.params;
-        let query = "UPDATE especialidades SET activo = 1 WHERE id_especialidad = ? ";
-        const [results, fields] = await Database.query( query, id );
-        console.log(results, fields)
-        res.send({ "msg": "Especialidad activada" });
-    }catch(error){
-        console.log(error);
-        res.status(500).send({"msg": error.error });
-    }
-}
 
-export const desactivarEspecialidad =  async( req, res )=>{
+export const editarEspecialidad = async( req, res )=>{
     try{
         const { id } = req.params;
-        let query = "UPDATE especialidades SET activo = 0 WHERE id_especialidad = ? ";
-        const [results, fields] = await Database.query( query, id );
-        console.log(results, fields)
-        res.send({ "msg": "Especialidad desactivada" });
+        const { nombre, activo } = req.body;
+        const results = await editarEspecialidadService( id, nombre, activo );
+
+        if ( results.affectedRows === 0 ) return res.status(404).send({ "msg": "Especialidad no encontrada" });
+        res.send({ "msg": "Especialidad editada correctamente", id: parseInt(id), nombre, activo });
     }catch(error){
         console.log(error);
-        res.status(500).send({"msg": error.error });
+        res.status(500).send({ "msg": error.message });
     }
 }
