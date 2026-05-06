@@ -11,7 +11,7 @@ especialidadesRoutes.get('/:id',[], buscarEspecialidad )
 especialidadesRoutes.get('/', listarEspecialidades )
 
 //TODO: validar nombre, activo
-especialidadesRoutes.post('/crear', crearEspecialidad )
+especialidadesRoutes.post('/', crearEspecialidad )
 
 //TODO: validar nombre, activo, id numerico
 especialidadesRoutes.put('/:id', editarEspecialidad)

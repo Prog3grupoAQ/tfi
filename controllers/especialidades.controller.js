@@ -55,7 +55,7 @@ export const editarEspecialidad = async( req, res )=>{
         const results = await editarEspecialidadService( id, nombre, activo );
 
         if ( results.affectedRows === 0 ) return res.status(404).send({ "msg": "Especialidad no encontrada" });
-        res.send({ "msg": "Especialidad editada correctamente", id: parseInt(id), nombre, activo });
+        res.send({ "msg": "Especialidad editada correctamente", data: {id: parseInt(id), nombre, activo} });
     }catch(error){
         console.log(error);
         res.status(500).send({ "msg": error.message });
