@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { activarEspecialidad, buscarEspecialidad, crearEspecialidad, desactivarEspecialidad, listarEspecialidades } from "../controllers/especialidades.controller.js";
+import { buscarEspecialidad, crearEspecialidad, editarEspecialidad, listarEspecialidades } from "../controllers/especialidades.controller.js";
 
 export const especialidadesRoutes = Router();
 
@@ -11,12 +11,7 @@ especialidadesRoutes.get('/:id',[], buscarEspecialidad )
 especialidadesRoutes.get('/', listarEspecialidades )
 
 //TODO: validar nombre, activo
-especialidadesRoutes.post('/crear', crearEspecialidad )
+especialidadesRoutes.post('/', crearEspecialidad )
 
-//TODO: id sea numerico, field validatos params
-especialidadesRoutes.post('/:id/activar', activarEspecialidad )
-
-//TODO: id sea numerico, field validatos params
-especialidadesRoutes.post('/:id/desactivar', desactivarEspecialidad )
-
-//TODO: editar especialidad, y validar
+//TODO: validar nombre, activo, id numerico
+especialidadesRoutes.put('/:id', editarEspecialidad)
