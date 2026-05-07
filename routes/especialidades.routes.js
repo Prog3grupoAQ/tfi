@@ -1,17 +1,49 @@
 import { Router } from "express";
-import { buscarEspecialidad, crearEspecialidad, editarEspecialidad, listarEspecialidades } from "../controllers/especialidades.controller.js";
+
+import {
+  buscarEspecialidad,
+  crearEspecialidad,
+  editarEspecialidad,
+  listarEspecialidades,
+  eliminarEspecialidad,
+  restaurarEspecialidad,
+} from "../controllers/especialidades.controller.js";
+
+import {
+  validarEspecialidad,
+  validarId,
+} from "../middlewares/especialidades.middleware.js";
 
 export const especialidadesRoutes = Router();
 
-//TODO: mejorar los mensajes de error
+// BROWSE
+// GET [url]/api/v1/especialidades
+especialidadesRoutes.get("/", listarEspecialidades);
 
-//TODO: id sea numerico, field validatos params
-especialidadesRoutes.get('/:id',[], buscarEspecialidad )
+// READ
+// GET [url]/api/v1/especialidades/:id
+especialidadesRoutes.get("/:id", [validarId], buscarEspecialidad);
 
-especialidadesRoutes.get('/', listarEspecialidades )
+// ADD
+// POST [url]/api/v1/especialidades
+especialidadesRoutes.post("/", [validarEspecialidad], crearEspecialidad);
 
-//TODO: validar nombre, activo
-especialidadesRoutes.post('/', crearEspecialidad )
+// EDIT
+// PUT [url]/api/v1/especialidades/:id
+especialidadesRoutes.put(
+  "/:id",
+  [validarId, validarEspecialidad],
+  editarEspecialidad,
+);
 
-//TODO: validar nombre, activo, id numerico
-especialidadesRoutes.put('/:id', editarEspecialidad)
+// DELETE (soft delete)
+// DELETE [url]/api/v1/especialidades/:id
+especialidadesRoutes.delete("/:id", [validarId], eliminarEspecialidad);
+
+// RESTORE (Extra)
+// PATCH [url]/api/v1/especialidades/:id/restaurar
+especialidadesRoutes.patch(
+  "/:id/restaurar",
+  [validarId],
+  restaurarEspecialidad,
+);

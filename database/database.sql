@@ -164,7 +164,7 @@ CREATE TABLE `turnos_reservas` (
   `id_obra_social` int(10) UNSIGNED NOT NULL,
   `fecha_hora` datetime NOT NULL,
   `valor_total` decimal(10,2) NOT NULL,
-  `atentido` tinyint(3) UNSIGNED NOT NULL,
+  `atendido` tinyint(3) UNSIGNED NOT NULL,
   `activo` tinyint(3) UNSIGNED NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -172,7 +172,7 @@ CREATE TABLE `turnos_reservas` (
 -- Volcado de datos para la tabla `turnos_reservas`
 --
 
-INSERT INTO `turnos_reservas` (`id_turno_reserva`, `id_medico`, `id_paciente`, `id_obra_social`, `fecha_hora`, `valor_total`, `atentido`, `activo`) VALUES
+INSERT INTO `turnos_reservas` (`id_turno_reserva`, `id_medico`, `id_paciente`, `id_obra_social`, `fecha_hora`, `valor_total`, `atendido`, `activo`) VALUES
 (1, 1, 1, 1, '2026-04-01 17:00:00', 4500.00, 0, 1),
 (2, 3, 2, 2, '2026-04-01 18:00:00', 9000.00, 0, 1),
 (4, 4, 3, 3, '2026-04-01 19:00:00', 13500.00, 0, 1),

@@ -1,28 +1,32 @@
-import express from "express"
+import express from "express";
+
 import { userRoutes } from "../routes/user.routes.js";
 import { especialidadesRoutes } from "../routes/especialidades.routes.js";
 
 export class Server {
+  constructor() {
+    this.app = express();
 
-    constructor(){
-        this.app = express();
-        this.app.use(express.json());
-        this.routes();
-    }
+    this.middlewares();
 
-    routes(){
-        this.app.use( "/especialidades", especialidadesRoutes )
-        this.app.use( "/", userRoutes )
-    }
+    this.routes();
+  }
 
-    listen(){
-        const port = process.env.PORT || 3003;
+  middlewares() {
+    this.app.use(express.json());
+  }
 
-        this.app.listen( port , ()=>{
-            console.log(`Server corriendo en puerto ${port}`)
-        })
+  routes() {
+    this.app.use("/api/v1/especialidades", especialidadesRoutes);
 
-    }
-   
+    this.app.use("/api/v1", userRoutes);
+  }
+
+  listen() {
+    const port = process.env.PORT || 3003;
+
+    this.app.listen(port, () => {
+      console.log(`Server corriendo en puerto ${port}`);
+    });
+  }
 }
-
