@@ -1,4 +1,3 @@
-import { Database } from "../database/conexion.js";
 import { EspecialidadesService } from "../services/especialidades.service.js";
 
 export class EspecialidadesController{
@@ -9,27 +8,33 @@ export class EspecialidadesController{
 
   listarTodas = async (req, res) => {
     try {
-      const resultado = await this.especialidades.listarTodas()
+      const inactivos = req.query.inactivos === "true";
+      const resultado = await this.especialidades.listarTodas(inactivos);
 
-      if (!resultado) res.status(404).json({ estado: false, msg: "No se encontraron especialidades" });
-      res.json({ estado: true, data: resultado });
+      if (!resultado || resultado.length === 0)
+        return res.status(404).json({ estado: false, msg: "No se encontraron especialidades" });
+
+      return res.json({ estado: true, data: resultado });
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ estado: false, msg: "Error interno" });
+      console.error(error);
+      return res.status(500).json({ estado: false, msg: "Error interno del servidor" });
     }
-  }
+  };
 
   buscar = async (req, res) => {
     try {
       const { id } = req.params;
       const resultado = await this.especialidades.buscar(id);
-      if (!resultado) res.status(404).json({ estado: false, msg: "Especialidad no encontrada" });
-      res.json({ estado: true, data: resultado });
+
+      if (!resultado || resultado.length === 0)
+        return res.status(404).json({ estado: false, msg: "Especialidad no encontrada" });
+
+      return res.json({ estado: true, data: resultado[0] });
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ estado: false, msg: "Error interno" });
+      console.error(error);
+      return res.status(500).json({ estado: false, msg: "Error interno del servidor" });
     }
-  }
+  };
 
   editar = async (req, res) => {
     try {
@@ -37,28 +42,44 @@ export class EspecialidadesController{
       const { nombre, activo } = req.body;
       const results = await this.especialidades.editar(id, nombre, activo);
 
-      if (results.affectedRows === 0) res.status(404).json({ estado: false, msg: "Especialidad no encontrada" });
-      res.json({
+      if (results.affectedRows === 0)
+        return res.status(404).json({ estado: false, msg: "Especialidad no encontrada o inactiva" });
+
+      if (results.changedRows === 0)
+        return res.status(200).json({
+          estado: true,
+          msg: "Sin cambios (los datos enviados son idénticos a los actuales)",
+          data: { id: parseInt(id), nombre, activo },
+        });
+
+      return res.status(200).json({
         estado: true,
         msg: "Especialidad editada correctamente",
         data: { id: parseInt(id), nombre, activo },
       });
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ estado: false, msg: "Error interno" });
+      if (error.code === "ER_DUP_ENTRY")
+        return res.status(409).json({ estado: false, msg: "Ya existe una especialidad con ese nombre" });
+      console.error(error);
+      return res.status(500).json({ estado: false, msg: "Error interno del servidor" });
     }
   };
 
-  crear= async (req, res) => {
+  crear = async (req, res) => {
     try {
-      const body = req.body;
-      const { nombre, activo } = req.body;
+      const { nombre, activo = 1 } = req.body;
       const response = await this.especialidades.crear(nombre, activo);
 
-      res.status(201).json({ estado: true, msg: "Especialidad creada correctamente", data: { id: response.insertId, nombre, activo } });
+      return res.status(201).json({
+        estado: true,
+        msg: "Especialidad creada correctamente",
+        data: { id: response.insertId, nombre, activo },
+      });
     } catch (error) {
-      console.log(error);
-      res.status(500).json({ estado: false, msg: "Error interno" });
+      if (error.code === "ER_DUP_ENTRY")
+        return res.status(409).json({ estado: false, msg: "Ya existe una especialidad con ese nombre" });
+      console.error(error);
+      return res.status(500).json({ estado: false, msg: "Error interno del servidor" });
     }
   };
 
@@ -67,15 +88,13 @@ export class EspecialidadesController{
       const { id } = req.params;
       const results = await this.especialidades.eliminar(id);
 
-      if (results.affectedRows === 0) {
-        return res.status(404).json({estado: false,msg: "Especialidad no encontrada o ya eliminada",});
-      }
+      if (results.affectedRows === 0)
+        return res.status(404).json({ estado: false, msg: "Especialidad no encontrada o ya eliminada" });
 
-      res.status(200).json({estado: true,msg: "Especialidad eliminada",});
+      return res.status(200).json({ estado: true, msg: "Especialidad eliminada" });
     } catch (error) {
-      console.log(error);
-
-      res.status(500).json({estado: false,msg: "Error interno"});
+      console.error(error);
+      return res.status(500).json({ estado: false, msg: "Error interno del servidor" });
     }
   };
 
@@ -84,29 +103,13 @@ export class EspecialidadesController{
       const { id } = req.params;
       const results = await this.especialidades.restaurar(id);
 
-      if (results.affectedRows === 0) {
-        return res.status(404).json({estado: false, msg: "Especialidad no encontrada o activa",});
-      }
+      if (results.affectedRows === 0)
+        return res.status(404).json({ estado: false, msg: "Especialidad no encontrada o ya activa" });
 
-      res.status(200).json({estado: true,msg: "Especialidad restaurada correctamente",});
+      return res.status(200).json({ estado: true, msg: "Especialidad restaurada correctamente" });
     } catch (error) {
-      console.log(error);
-      res.status(500).json({estado: false,msg: "Error interno"});
+      console.error(error);
+      return res.status(500).json({ estado: false, msg: "Error interno del servidor" });
     }
-  }
+  };
 }
-
-/*
-
-export const listarEspecialidades
-
-export const buscarEspecialidad
-
-export const crearEspecialidad
-
-export const editarEspecialidad
-
-export const eliminarEspecialidad
-
-export const restaurarEspecialidad
-*/
