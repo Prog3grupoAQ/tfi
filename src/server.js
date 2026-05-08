@@ -1,7 +1,6 @@
 import express from "express";
+import { EspecialidadesRoutes } from "../src/routes/v1/especialidades.routes.js";
 
-import { userRoutes } from "../routes/user.routes.js";
-import { especialidadesRoutes } from "../routes/especialidades.routes.js";
 
 export class Server {
   constructor() {
@@ -17,9 +16,7 @@ export class Server {
   }
 
   routes() {
-    this.app.use("/api/v1/especialidades", especialidadesRoutes);
-
-    this.app.use("/api/v1", userRoutes);
+    this.app.use("/api/v1/especialidades", EspecialidadesRoutes);
   }
 
   listen() {

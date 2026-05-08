@@ -1,5 +1,5 @@
-import { Database } from "./database/conexion.js";
-import { Server } from "./models/server.js";
+import { Database } from "./src/database/conexion.js";
+import { Server } from "./src/server.js";
 
 const server = new Server();
 
