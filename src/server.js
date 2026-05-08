@@ -1,5 +1,5 @@
 import express from "express";
-import { EspecialidadesRoutes } from "../src/routes/v1/especialidades.routes.js";
+import { EspecialidadesRoutes } from "./routes/v1/especialidades.routes.js";
 
 
 export class Server {
