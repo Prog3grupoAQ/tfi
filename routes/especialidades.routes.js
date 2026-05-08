@@ -3,12 +3,6 @@ import { param, check } from "express-validator";
 import { validarCampos } from "../middlewares/validarCampos.js";
 import { buscarEspecialidad, crearEspecialidad, editarEspecialidad, listarEspecialidades, eliminarEspecialidad, restaurarEspecialidad, } from "../controllers/especialidades.controller.js";
 
-
-import {
-  validarEspecialidad,
-  validarId,
-} from "../middlewares/especialidades.middleware.js";
-
 export const especialidadesRoutes = Router();
 
 
