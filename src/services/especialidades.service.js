@@ -1,12 +1,14 @@
+import { EspecialidadesDB } from "../database/especialidades.database.js";
 import { Database } from "../database/conexion.js";
 
 export class EspecialidadesService{
 
+  constructor(){
+    this.database = new EspecialidadesDB();
+  }
 
   listarTodas = async (inactivos = false) => {
-    const where = !inactivos ? "WHERE activo = 1" : "";
-    const query = `SELECT * FROM especialidades ${where}`;
-    const [results] = await Database.query(query);
+    const results = await this.database.listar( inactivos )
     return results;
   };
 

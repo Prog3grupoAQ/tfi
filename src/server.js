@@ -1,5 +1,7 @@
 import express from "express";
+import fs from "fs"
 import { EspecialidadesRoutes } from "./routes/v1/especialidades.routes.js";
+import morgan from "morgan";
 
 
 export class Server {
@@ -7,12 +9,21 @@ export class Server {
     this.app = express();
 
     this.middlewares();
-
+    this.logs();
     this.routes();
   }
 
   middlewares() {
     this.app.use(express.json());
+  }
+
+  logs(){
+    const log = fs.createWriteStream(
+      './accesos.log',  
+      { flags: 'a' }
+    );
+    this.app.use(morgan('tiny'))
+    this.app.use(morgan('combined', {stream: log} ))
   }
 
   routes() {
