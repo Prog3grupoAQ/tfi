@@ -27,7 +27,6 @@ EspecialidadesRoutes.get('/:id',
 EspecialidadesRoutes.post('/',
   [
     check('nombre').notEmpty().withMessage('El nombre es obligatorio').isString().withMessage('El nombre debe ser un texto').isLength({ min: 3, max: 120 }).withMessage('El nombre debe tener entre 3 y 120 caracteres'),
-    check('activo').optional().isBoolean().withMessage('El campo activo debe ser true o false'),
     validarCampos
   ],
   especialidadesController.crear
