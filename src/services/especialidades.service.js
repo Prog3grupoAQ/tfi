@@ -1,48 +1,31 @@
-import { Database } from "../database/conexion.js";
+import { EspecialidadesModel } from "../database/especialidades.js";
 
-export class EspecialidadesService{
-
+export class EspecialidadesService {
+  constructor() {
+    this.especialidadesModel = new EspecialidadesModel();
+  }
 
   listarTodas = async (inactivos = false) => {
-    const where = !inactivos ? "WHERE activo = 1" : "";
-    const query = `SELECT * FROM especialidades ${where}`;
-    const [results] = await Database.query(query);
-    return results;
+    return await this.especialidadesModel.listarTodas(inactivos);
   };
 
   buscar = async (id) => {
-    const query = "SELECT * FROM especialidades AS e WHERE e.id_especialidad = ? AND e.activo = 1";
-    const [results] = await Database.query(query, [id]);
-    return results;
+    return await this.especialidadesModel.buscar(id);
   };
 
   editar = async (id, nombre, activo) => {
-    if (activo === undefined) {
-      const query = "UPDATE especialidades SET nombre = ? WHERE id_especialidad = ? AND activo = 1";
-      const [results] = await Database.query(query, [nombre, id]);
-      return results;
-    }
-    const query = "UPDATE especialidades SET nombre = ?, activo = ? WHERE id_especialidad = ? AND activo = 1";
-    const [results] = await Database.query(query, [nombre, activo, id]);
-    return results;
+    return await this.especialidadesModel.editar(id, nombre, activo);
   };
 
-  crear = async (nombre, activo) => {
-    const query = "INSERT INTO especialidades (nombre, activo) VALUES (?, ?)";
-    const [response] = await Database.query(query, [nombre, activo]);
-    return response;
+  crear = async (nombre) => {
+    return await this.especialidadesModel.crear(nombre);
   };
 
   eliminar = async (id) => {
-    const query = `UPDATE especialidades SET activo = 0 WHERE id_especialidad = ? AND activo = 1`;
-    const [results] = await Database.query(query, [id]);
-    return results;
+    return await this.especialidadesModel.eliminar(id);
   };
 
   restaurar = async (id) => {
-    const query = `UPDATE especialidades SET activo = 1 WHERE id_especialidad = ? AND activo = 0`;
-    const [results] = await Database.query(query, [id]);
-    return results;
+    return await this.especialidadesModel.restaurar(id);
   };
-
-}
+}

@@ -67,13 +67,13 @@ export class EspecialidadesController{
 
   crear = async (req, res) => {
     try {
-      const { nombre, activo = 1 } = req.body;
-      const response = await this.especialidades.crear(nombre, activo);
+      const { nombre } = req.body;
+      const response = await this.especialidades.crear(nombre);
 
       return res.status(201).json({
         estado: true,
         msg: "Especialidad creada correctamente",
-        data: { id: response.insertId, nombre, activo },
+        data: { id: response.insertId, nombre, activo: 1 },
       });
     } catch (error) {
       if (error.code === "ER_DUP_ENTRY")
