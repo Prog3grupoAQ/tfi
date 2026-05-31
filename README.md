@@ -25,5 +25,6 @@ Hasta el momento, hemos utilizado las siguientes tecnologías:
 - JavaScript  
 - Node.js  
 - MySQL
+- Morgan
 
 

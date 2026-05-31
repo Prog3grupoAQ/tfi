@@ -1,3 +1,6 @@
 .env
 node_modules/
 settings.json
+*.log
+*.zip
+respositorio_github.txt
