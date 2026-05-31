@@ -1,31 +1,42 @@
-import { EspecialidadesModel } from "../database/especialidades.js";
+import { EspecialidadesDatabase } from "../database/especialidades.database.js";
 
 export class EspecialidadesService {
   constructor() {
-    this.especialidadesModel = new EspecialidadesModel();
+    this.db = new EspecialidadesDatabase();
   }
 
   listarTodas = async (inactivos = false) => {
-    return await this.especialidadesModel.listarTodas(inactivos);
+    return await this.db.listarTodas(inactivos);
   };
 
-  buscar = async (id) => {
-    return await this.especialidadesModel.buscar(id);
+  buscarPorId = async (id) => {
+    return await this.db.buscarPorId(id);
   };
 
-  editar = async (id, nombre, activo) => {
-    return await this.especialidadesModel.editar(id, nombre, activo);
+  crear = async (especialidad) => {
+    const nuevo_id = await this.db.crear(especialidad);
+    if (!nuevo_id) return null;
+    
+    return this.buscarPorId(nuevo_id);
   };
 
-  crear = async (nombre) => {
-    return await this.especialidadesModel.crear(nombre);
+  editar = async (id, especialidad) => {
+    const result = await this.db.editar(id, especialidad);
+    if (result.affectedRows === 0) return null;
+    
+    const data = await this.buscarPorId(id);
+    return { changed: result.changedRows > 0, data };
   };
 
-  eliminar = async (id) => {
-    return await this.especialidadesModel.eliminar(id);
+  eliminar = async (id) => {    
+    const existe = await this.buscarPorId(id);
+    if (!existe || existe.length === 0) return null;
+    return await this.db.eliminar(id);
   };
 
   restaurar = async (id) => {
-    return await this.especialidadesModel.restaurar(id);
+    const result = await this.db.restaurar(id);
+    if (result.affectedRows === 0) return null;
+    return result;
   };
-}
+}

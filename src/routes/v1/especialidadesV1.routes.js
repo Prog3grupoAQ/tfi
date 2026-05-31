@@ -22,7 +22,7 @@ EspecialidadesRoutes.get('/:id',
     param('id').isNumeric().withMessage('El id debe ser numerico'), 
     validarCampos
   ], 
-  especialidadesController.buscar
+  especialidadesController.buscarPorId
 );
 EspecialidadesRoutes.post('/',
   [
@@ -57,4 +57,4 @@ EspecialidadesRoutes.patch("/:id",
   ],
   especialidadesController.restaurar
 );
-
+

@@ -1,9 +1,8 @@
 import { EspecialidadesService } from "../services/especialidades.service.js";
 
-export class EspecialidadesController{
-
-  constructor(){
-    this.especialidades = new EspecialidadesService()
+export class EspecialidadesController {
+  constructor() {
+    this.especialidades = new EspecialidadesService();
   }
 
   listarTodas = async (req, res) => {
@@ -21,10 +20,10 @@ export class EspecialidadesController{
     }
   };
 
-  buscar = async (req, res) => {
+  buscarPorId = async (req, res) => {
     try {
       const { id } = req.params;
-      const resultado = await this.especialidades.buscar(id);
+      const resultado = await this.especialidades.buscarPorId(id);
 
       if (!resultado || resultado.length === 0)
         return res.status(404).json({ estado: false, msg: "Especialidad no encontrada" });
@@ -36,48 +35,36 @@ export class EspecialidadesController{
     }
   };
 
-  editar = async (req, res) => {
+  crear = async (req, res) => {
     try {
-      const { id } = req.params;
-      const { nombre, activo } = req.body;
-      const results = await this.especialidades.editar(id, nombre, activo);
+      const { nombre } = req.body;
+      const nuevaEspecialidad = await this.especialidades.crear({ nombre });
 
-      if (results.affectedRows === 0)
-        return res.status(404).json({ estado: false, msg: "Especialidad no encontrada o inactiva" });
+      if (!nuevaEspecialidad || nuevaEspecialidad.length === 0)
+        return res.status(400).json({ estado: false, msg: "No se pudo crear la especialidad." });
 
-      if (results.changedRows === 0)
-        return res.status(200).json({
-          estado: true,
-          msg: "Sin cambios (los datos enviados son idénticos a los actuales)",
-          data: { id: parseInt(id), nombre, activo },
-        });
-
-      return res.status(200).json({
-        estado: true,
-        msg: "Especialidad editada correctamente",
-        data: { id: parseInt(id), nombre, activo },
-      });
+      return res.status(201).json({ estado: true, msg: "Especialidad creada correctamente", data: nuevaEspecialidad[0] });
     } catch (error) {
-      if (error.code === "ER_DUP_ENTRY")
-        return res.status(409).json({ estado: false, msg: "Ya existe una especialidad con ese nombre" });
       console.error(error);
       return res.status(500).json({ estado: false, msg: "Error interno del servidor" });
     }
   };
 
-  crear = async (req, res) => {
+  editar = async (req, res) => {
     try {
-      const { nombre } = req.body;
-      const response = await this.especialidades.crear(nombre);
+      const { id } = req.params;
+      const { nombre, activo } = req.body;
+      const resultado = await this.especialidades.editar(id, { nombre, activo });
 
-      return res.status(201).json({
-        estado: true,
-        msg: "Especialidad creada correctamente",
-        data: { id: response.insertId, nombre, activo: 1 },
-      });
+      if (!resultado)
+        return res.status(404).json({ estado: false, msg: "Especialidad no encontrada o inactiva" });
+
+      const msg = resultado.changed
+        ? "Especialidad editada correctamente"
+        : "Sin cambios (los datos enviados son idénticos a los actuales)";
+
+      return res.status(200).json({ estado: true, msg, data: resultado.data[0] });
     } catch (error) {
-      if (error.code === "ER_DUP_ENTRY")
-        return res.status(409).json({ estado: false, msg: "Ya existe una especialidad con ese nombre" });
       console.error(error);
       return res.status(500).json({ estado: false, msg: "Error interno del servidor" });
     }
@@ -86,9 +73,9 @@ export class EspecialidadesController{
   eliminar = async (req, res) => {
     try {
       const { id } = req.params;
-      const results = await this.especialidades.eliminar(id);
+      const resultado = await this.especialidades.eliminar(id);
 
-      if (results.affectedRows === 0)
+      if (!resultado)
         return res.status(404).json({ estado: false, msg: "Especialidad no encontrada o ya eliminada" });
 
       return res.status(200).json({ estado: true, msg: "Especialidad eliminada" });
@@ -101,9 +88,9 @@ export class EspecialidadesController{
   restaurar = async (req, res) => {
     try {
       const { id } = req.params;
-      const results = await this.especialidades.restaurar(id);
+      const resultado = await this.especialidades.restaurar(id);
 
-      if (results.affectedRows === 0)
+      if (!resultado)
         return res.status(404).json({ estado: false, msg: "Especialidad no encontrada o ya activa" });
 
       return res.status(200).json({ estado: true, msg: "Especialidad restaurada correctamente" });
