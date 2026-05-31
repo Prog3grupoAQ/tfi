@@ -1,50 +1,42 @@
-import { EspecialidadesDB } from "../database/especialidades.database.js";
-import { Database } from "../database/conexion.js";
+import { EspecialidadesDatabase } from "../database/especialidades.database.js";
 
-export class EspecialidadesService{
-
-  constructor(){
-    this.database = new EspecialidadesDB();
+export class EspecialidadesService {
+  constructor() {
+    this.db = new EspecialidadesDatabase();
   }
 
   listarTodas = async (inactivos = false) => {
-    const results = await this.database.listar( inactivos )
-    return results;
+    return await this.db.listarTodas(inactivos);
   };
 
-  buscar = async (id) => {
-    const query = "SELECT * FROM especialidades AS e WHERE e.id_especialidad = ? AND e.activo = 1";
-    const [results] = await Database.query(query, [id]);
-    return results;
+  buscarPorId = async (id) => {
+    return await this.db.buscarPorId(id);
   };
 
-  editar = async (id, nombre, activo) => {
-    if (activo === undefined) {
-      const query = "UPDATE especialidades SET nombre = ? WHERE id_especialidad = ? AND activo = 1";
-      const [results] = await Database.query(query, [nombre, id]);
-      return results;
-    }
-    const query = "UPDATE especialidades SET nombre = ?, activo = ? WHERE id_especialidad = ? AND activo = 1";
-    const [results] = await Database.query(query, [nombre, activo, id]);
-    return results;
+  crear = async (especialidad) => {
+    const nuevo_id = await this.db.crear(especialidad);
+    if (!nuevo_id) return null;
+    
+    return this.buscarPorId(nuevo_id);
   };
 
-  crear = async (nombre, activo) => {
-    const query = "INSERT INTO especialidades (nombre, activo) VALUES (?, ?)";
-    const [response] = await Database.query(query, [nombre, activo]);
-    return response;
+  editar = async (id, especialidad) => {
+    const result = await this.db.editar(id, especialidad);
+    if (result.affectedRows === 0) return null;
+    
+    const data = await this.buscarPorId(id);
+    return { changed: result.changedRows > 0, data };
   };
 
-  eliminar = async (id) => {
-    const query = `UPDATE especialidades SET activo = 0 WHERE id_especialidad = ? AND activo = 1`;
-    const [results] = await Database.query(query, [id]);
-    return results;
+  eliminar = async (id) => {    
+    const existe = await this.buscarPorId(id);
+    if (!existe || existe.length === 0) return null;
+    return await this.db.eliminar(id);
   };
 
   restaurar = async (id) => {
-    const query = `UPDATE especialidades SET activo = 1 WHERE id_especialidad = ? AND activo = 0`;
-    const [results] = await Database.query(query, [id]);
-    return results;
+    const result = await this.db.restaurar(id);
+    if (result.affectedRows === 0) return null;
+    return result;
   };
-
 }

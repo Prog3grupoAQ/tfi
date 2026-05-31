@@ -1,6 +1,6 @@
 import express from "express";
 import fs from "fs"
-import { EspecialidadesRoutes } from "./routes/v1/especialidades.routes.js";
+import { EspecialidadesRoutes } from "./routes/v1/especialidadesV1.routes.js";
 import morgan from "morgan";
 
 
