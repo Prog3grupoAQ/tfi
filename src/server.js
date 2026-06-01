@@ -1,6 +1,7 @@
 import express from "express";
 import fs from "fs"
 import { EspecialidadesRoutes } from "./routes/v1/especialidadesV1.routes.js";
+import { MedicosRoutes } from "./routes/v1/medicosV1.routes.js";
 import morgan from "morgan";
 
 
@@ -28,6 +29,7 @@ export class Server {
 
   routes() {
     this.app.use("/api/v1/especialidades", EspecialidadesRoutes);
+    this.app.use("/api/v1/medicos", MedicosRoutes);
   }
 
   listen() {
