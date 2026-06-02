@@ -13,7 +13,15 @@ export class MedicosService {
     return await this.db.buscarPorId(id);
   };
 
+  buscarPorMatricula = async (matricula) => {
+    return await this.db.buscarPorMatricula(matricula);
+  };
+
   crear = async (medico) => {
+    const { matricula } = medico;
+    const existente = await this.buscarPorMatricula(matricula);
+    if (existente && existente.length > 0) return { duplicado: true };
+
     const nuevo_id = await this.db.crear(medico);
     if (!nuevo_id) return null;
 

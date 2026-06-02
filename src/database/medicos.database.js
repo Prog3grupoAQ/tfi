@@ -28,6 +28,12 @@ export class MedicosDatabase {
     return results;
   };
 
+  buscarPorMatricula = async (matricula) => {
+    const query = "SELECT * FROM medicos WHERE matricula = ?";
+    const [results] = await Database.query(query, [matricula]);
+    return results;
+  };
+
   crear = async (medico) => {
     const { id_usuario, id_especialidad, matricula, descripcion, valor_consulta } = medico;
     const query = `INSERT INTO medicos (id_usuario, id_especialidad, matricula, descripcion, valor_consulta) 
