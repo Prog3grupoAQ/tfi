@@ -115,7 +115,7 @@ CREATE TABLE `obras_sociales` (
   `id_obra_social` int(10) UNSIGNED NOT NULL,
   `nombre` varchar(120) NOT NULL,
   `descripcion` varchar(255) NOT NULL,
-  `porcentaje_descuento` decimal(9,2) NOT NULL,
+  `porcentaje_descuento` decimal(3,2) NOT NULL,
   `es_particular` tinyint(1) UNSIGNED NOT NULL DEFAULT 0,
   `activo` tinyint(3) UNSIGNED NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -125,10 +125,10 @@ CREATE TABLE `obras_sociales` (
 --
 
 INSERT INTO `obras_sociales` (`id_obra_social`, `nombre`, `descripcion`, `porcentaje_descuento`, `es_particular`, `activo`) VALUES
-(1, 'Jerárquicos', 'jer', 10.00, 0, 1),
-(2, 'OSUNER', 'osu', 10.00, 0, 1),
-(3, 'OSECAC', 'ose', 11.00, 0, 1),
-(4, 'OSUNER 3', 'OSU', 13.00, 0, 1);
+(1, 'Jerárquicos', 'jer', 0.10, 0, 1),
+(2, 'OSUNER', 'osu', 0.10, 0, 1),
+(3, 'OSECAC', 'ose', 0.11, 0, 1),
+(4, 'OSUNER 3', 'OSU', 0.13, 0, 1);
 
 -- --------------------------------------------------------
 
