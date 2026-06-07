@@ -50,4 +50,10 @@ export class MedicosDatabase {
     const [result] = await Database.query(query, [id_especialidad, descripcion, valor_consulta, id]);
     return result;
   };
+
+  eliminar = async (id) => {
+    const query = "UPDATE usuarios SET activo = 0 WHERE id_usuario = ?";
+    const [result] = await Database.query(query, [id]);
+    return result;
+  };
 }

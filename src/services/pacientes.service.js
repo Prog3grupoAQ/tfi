@@ -38,7 +38,9 @@ export class PacientesService {
 
   eliminar = async (id) => {
     const existe = await this.buscarPorId(id);
+
     if (!existe || existe.length === 0) return null;
-    return await this.db.eliminar(id);
+    return await this.db.eliminar(existe[0].id_usuario);
   };
+
 }

@@ -45,3 +45,12 @@ MedicosRoutes.put("/:id",
   ],
   medicosController.editar
 );
+
+
+MedicosRoutes.delete("/:id",
+  [
+    param('id').isNumeric().withMessage('El id debe ser numérico'),
+    validarCampos
+  ],
+  medicosController.eliminar
+);
