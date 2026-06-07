@@ -35,4 +35,12 @@ export class MedicosService {
     const data = await this.buscarPorId(id);
     return { changed: result.changedRows > 0, data };
   };
+
+  eliminar = async (id) => {
+    const existe = await this.buscarPorId(id);
+
+    if (!existe || existe.length === 0) return null;
+    return await this.db.eliminar(existe[0].id_usuario);
+  };
+  
 }

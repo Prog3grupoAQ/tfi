@@ -72,4 +72,19 @@ export class MedicosController {
       return res.status(500).json({ estado: false, msg: "Error interno del servidor" });
     }
   };
+
+  eliminar = async (req, res) => {
+    try {
+      const { id } = req.params;
+      const resultado = await this.medicos.eliminar(id);
+
+      if (!resultado)
+        return res.status(404).json({ estado: false, msg: "Medico no encontrado" });
+
+      return res.status(200).json({ estado: true, msg: "Medico eliminado" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ estado: false, msg: "Error interno del servidor" });
+    }
+  };
 }

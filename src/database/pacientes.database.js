@@ -42,7 +42,7 @@ export class PacientesDatabase {
   };
 
   eliminar = async (id) => {
-    const query = "DELETE FROM pacientes WHERE id_paciente = ?";
+    const query = "UPDATE usuarios SET activo = 0 WHERE id_usuario = ?";
     const [result] = await Database.query(query, [id]);
     return result;
   };
