@@ -6,6 +6,8 @@ import { ObrasSocialesRoutes } from "./routes/v1/obrasSocialesV1.routes.js";
 import { PacientesRoutes } from "./routes/v1/pacientesV1.routes.js";
 import { RegistroRoutes } from "./routes/v1/registroV1.routes.js";
 import { TurnosRoutes } from "./routes/v1/turnosV1.routes.js";
+import { AuthRoutes } from "./routes/v1/authV1.routes.js";
+import passport from "./config/passport.js";
 import morgan from "morgan";
 
 
@@ -21,6 +23,7 @@ export class Server {
   middlewares() {
     this.app.use(express.json());
     this.app.use("/uploads", express.static("uploads"));
+    this.app.use(passport.initialize());
   }
 
   logs(){
@@ -39,6 +42,7 @@ export class Server {
     this.app.use("/api/v1/pacientes", PacientesRoutes);
     this.app.use("/api/v1/registro", RegistroRoutes);
     this.app.use("/api/v1/turnos", TurnosRoutes);
+    this.app.use("/api/v1/auth", AuthRoutes);
   }
 
   listen() {
