@@ -1,8 +1,10 @@
 import { PacientesService } from "../services/pacientes.service.js";
+import { ObrasSocialesService } from "../services/obras_sociales.service.js";
 
 export class PacientesController {
   constructor() {
     this.pacientes = new PacientesService();
+    this.obrasSociales = new ObrasSocialesService();
   }
 
   listarTodos = async (req, res) => {
@@ -57,6 +59,11 @@ export class PacientesController {
     try {
       const { id } = req.params;
       const { id_obra_social } = req.body;
+
+      const obraSocial = await this.obrasSociales.buscarPorId(id_obra_social);
+      if (!obraSocial || obraSocial.length === 0)
+        return res.status(422).json({ estado: false, msg: "La obra social no existe" });
+
       const resultado = await this.pacientes.editar(id, { id_obra_social });
 
       if (!resultado)

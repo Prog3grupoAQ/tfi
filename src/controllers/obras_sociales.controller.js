@@ -38,6 +38,11 @@ export class ObrasSocialesController {
   crear = async (req, res) => {
     try {
       const { nombre, descripcion, porcentaje_descuento, es_particular } = req.body;
+
+      const existente = await this.obrasSociales.buscarPorNombre(nombre);
+      if (existente && existente.length > 0)
+        return res.status(409).json({ estado: false, msg: "Ya existe una obra social con ese nombre" });
+
       const nuevaObraSocial = await this.obrasSociales.crear({ nombre, descripcion, porcentaje_descuento, es_particular });
 
       if (!nuevaObraSocial || nuevaObraSocial.length === 0)
@@ -45,8 +50,6 @@ export class ObrasSocialesController {
 
       return res.status(201).json({ estado: true, msg: "Obra social creada correctamente", data: nuevaObraSocial[0] });
     } catch (error) {
-      if (error.code === "ER_DUP_ENTRY")
-        return res.status(409).json({ estado: false, msg: "Ya existe una obra social con ese nombre" });
       console.error(error);
       return res.status(500).json({ estado: false, msg: "Error interno del servidor" });
     }
@@ -56,6 +59,11 @@ export class ObrasSocialesController {
     try {
       const { id } = req.params;
       const { nombre, descripcion, porcentaje_descuento, es_particular } = req.body;
+
+      const existente = await this.obrasSociales.buscarPorNombre(nombre, id);
+      if (existente && existente.length > 0)
+        return res.status(409).json({ estado: false, msg: "Ya existe una obra social con ese nombre" });
+
       const resultado = await this.obrasSociales.editar(id, { nombre, descripcion, porcentaje_descuento, es_particular });
 
       if (!resultado)
@@ -67,8 +75,6 @@ export class ObrasSocialesController {
 
       return res.status(200).json({ estado: true, msg, data: resultado.data[0] });
     } catch (error) {
-      if (error.code === "ER_DUP_ENTRY")
-        return res.status(409).json({ estado: false, msg: "Ya existe una obra social con ese nombre" });
       console.error(error);
       return res.status(500).json({ estado: false, msg: "Error interno del servidor" });
     }
