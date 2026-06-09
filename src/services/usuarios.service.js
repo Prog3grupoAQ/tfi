@@ -14,4 +14,12 @@ export class UsuariosService {
     if (!nuevo_id) return null;
     return nuevo_id;
   };
+
+  buscar = async (email, contrasenia) => {
+    return await this.db.buscar(email, contrasenia);
+  };
+
+  buscarPorId = async (id_usuario) => {
+    return await this.db.buscarPorId(id_usuario);
+  };
 }
