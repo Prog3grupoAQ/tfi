@@ -1,14 +1,16 @@
+import passport from "./config/passport.js";
 import express from "express";
+import morgan from "morgan";
+import cors from "cors";
 import fs from "fs"
 import { EspecialidadesRoutes } from "./routes/v1/especialidadesV1.routes.js";
-import { MedicosRoutes } from "./routes/v1/medicosV1.routes.js";
 import { ObrasSocialesRoutes } from "./routes/v1/obrasSocialesV1.routes.js";
 import { PacientesRoutes } from "./routes/v1/pacientesV1.routes.js";
 import { RegistroRoutes } from "./routes/v1/registroV1.routes.js";
+import { MedicosRoutes } from "./routes/v1/medicosV1.routes.js";
 import { TurnosRoutes } from "./routes/v1/turnosV1.routes.js";
 import { AuthRoutes } from "./routes/v1/authV1.routes.js";
-import passport from "./config/passport.js";
-import morgan from "morgan";
+
 
 
 export class Server {
@@ -21,6 +23,7 @@ export class Server {
   }
 
   middlewares() {
+    this.app.use(cors());
     this.app.use(express.json());
     this.app.use("/uploads", express.static("uploads"));
     this.app.use(passport.initialize());
