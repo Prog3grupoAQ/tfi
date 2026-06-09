@@ -4,6 +4,7 @@ import { EspecialidadesRoutes } from "./routes/v1/especialidadesV1.routes.js";
 import { MedicosRoutes } from "./routes/v1/medicosV1.routes.js";
 import { ObrasSocialesRoutes } from "./routes/v1/obrasSocialesV1.routes.js";
 import { PacientesRoutes } from "./routes/v1/pacientesV1.routes.js";
+import { RegistroRoutes } from "./routes/v1/registroV1.routes.js";
 import morgan from "morgan";
 
 
@@ -18,6 +19,7 @@ export class Server {
 
   middlewares() {
     this.app.use(express.json());
+    this.app.use("/uploads", express.static("uploads"));
   }
 
   logs(){
@@ -34,6 +36,7 @@ export class Server {
     this.app.use("/api/v1/medicos", MedicosRoutes);
     this.app.use("/api/v1/obras_sociales", ObrasSocialesRoutes);
     this.app.use("/api/v1/pacientes", PacientesRoutes);
+    this.app.use("/api/v1/registro", RegistroRoutes);
   }
 
   listen() {

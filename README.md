@@ -26,5 +26,5 @@ Hasta el momento, hemos utilizado las siguientes tecnologías:
 - Node.js  
 - MySQL
 - Morgan
-
+- Multer
 

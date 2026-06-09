@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { param, check, query } from "express-validator";
+import { check, param, query } from "express-validator";
 import { validarCampos } from "../../middlewares/validarCampos.js";
 import { PacientesController } from "../../controllers/pacientes.controller.js";
 
@@ -23,14 +23,6 @@ PacientesRoutes.get("/:id",
   pacientesController.buscarPorId
 );
 
-PacientesRoutes.post("/",
-  [
-    check('id_usuario').notEmpty().withMessage('El id de usuario es obligatorio').isNumeric().withMessage('El id de usuario debe ser numérico'),
-    check('id_obra_social').notEmpty().withMessage('El id de obra social es obligatorio').isNumeric().withMessage('El id de obra social debe ser numérico'),
-    validarCampos
-  ],
-  pacientesController.crear
-);
 
 PacientesRoutes.put("/:id",
   [

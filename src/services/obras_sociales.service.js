@@ -13,6 +13,10 @@ export class ObrasSocialesService {
     return await this.db.buscarPorId(id);
   };
 
+  buscarPorNombre = async (nombre, excluirId = null) => {
+    return await this.db.buscarPorNombre(nombre, excluirId);
+  };
+
   crear = async (obraSocial) => {
     const nuevo_id = await this.db.crear(obraSocial);
     if (!nuevo_id) return null;
