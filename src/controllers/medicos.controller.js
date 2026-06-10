@@ -56,6 +56,21 @@ export class MedicosController {
   editar = async (req, res) => {
     try {
       const { id } = req.params;
+      const usuario = req.user;
+
+      if (!usuario) {
+        return res.status(401).json({ estado: false, msg: "Usuario no autenticado" });
+      }
+
+      if (usuario.rol === 1) {
+        const medicosUsuario = await this.medicos.buscarPorUsuario(usuario.id_usuario);
+        if (!medicosUsuario || medicosUsuario.length === 0 || medicosUsuario[0].id_medico !== Number(id)) {
+          return res.status(403).json({ estado: false, msg: "Acceso denegado: no puede editar otro médico" });
+        }
+      } else if (usuario.rol !== 3) {
+        return res.status(403).json({ estado: false, msg: "Acceso denegado" });
+      }
+
       const { id_especialidad, descripcion, valor_consulta } = req.body;
       const resultado = await this.medicos.editar(id, { id_especialidad, descripcion, valor_consulta });
 

@@ -25,6 +25,19 @@ export class PacientesController {
   buscarPorId = async (req, res) => {
     try {
       const { id } = req.params;
+      const usuario = req.user;
+
+      if (!usuario) {
+        return res.status(401).json({ estado: false, msg: "Usuario no autenticado" });
+      }
+
+      if (usuario.rol === 2) {
+        const pacienteUsuario = await this.pacientes.buscarPorUsuario(usuario.id_usuario);
+        if (!pacienteUsuario || pacienteUsuario.length === 0 || pacienteUsuario[0].id_paciente !== Number(id)) {
+          return res.status(403).json({ estado: false, msg: "Acceso denegado: no puede ver otro paciente" });
+        }
+      }
+
       const resultado = await this.pacientes.buscarPorId(id);
 
       if (!resultado || resultado.length === 0)
@@ -58,6 +71,21 @@ export class PacientesController {
   editar = async (req, res) => {
     try {
       const { id } = req.params;
+      const usuario = req.user;
+
+      if (!usuario) {
+        return res.status(401).json({ estado: false, msg: "Usuario no autenticado" });
+      }
+
+      if (usuario.rol === 2) {
+        const pacienteUsuario = await this.pacientes.buscarPorUsuario(usuario.id_usuario);
+        if (!pacienteUsuario || pacienteUsuario.length === 0 || pacienteUsuario[0].id_paciente !== Number(id)) {
+          return res.status(403).json({ estado: false, msg: "Acceso denegado: no puede editar otro paciente" });
+        }
+      } else if (usuario.rol !== 3) {
+        return res.status(403).json({ estado: false, msg: "Acceso denegado" });
+      }
+
       const { id_obra_social } = req.body;
 
       const obraSocial = await this.obrasSociales.buscarPorId(id_obra_social);

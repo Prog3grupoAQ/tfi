@@ -2,15 +2,16 @@ import { Router } from "express";
 import { param, check, query } from "express-validator";
 import { validarCampos } from "../../middlewares/validarCampos.js";
 import { TurnosReservasController } from "../../controllers/turnos_reservas.controller.js";
+import { autenticarUsuario } from "../../middlewares/autenticarUsuario.js";
+import { autorizarUsuarios } from "../../middlewares/autorizarUsuarios.js";
 
 export const TurnosRoutes = Router();
 
 const turnosController = new TurnosReservasController();
 
-// ToDo para agregar middleware de autenticación JWT
-// ToDo para agregar middleware de autorización por roles (Médico=1, Paciente=2, Admin=3)
-
 TurnosRoutes.get("/",
+  autenticarUsuario,
+  autorizarUsuarios([1, 2, 3]),
   [
     query('medico').optional().isNumeric().withMessage('El id de médico debe ser numérico'),
     query('paciente').optional().isNumeric().withMessage('El id de paciente debe ser numérico'),
@@ -20,6 +21,8 @@ TurnosRoutes.get("/",
 );
 
 TurnosRoutes.get("/:id",
+  autenticarUsuario,
+  autorizarUsuarios([1, 2, 3]),
   [
     param('id').isNumeric().withMessage('El id debe ser numérico'),
     validarCampos
@@ -28,6 +31,8 @@ TurnosRoutes.get("/:id",
 );
 
 TurnosRoutes.post("/",
+  autenticarUsuario,
+  autorizarUsuarios([2, 3]),
   [
     check('id_medico').notEmpty().withMessage('El id de médico es obligatorio').isNumeric().withMessage('El id de médico debe ser numérico'),
     check('id_paciente').notEmpty().withMessage('El id de paciente es obligatorio').isNumeric().withMessage('El id de paciente debe ser numérico'),
@@ -40,6 +45,8 @@ TurnosRoutes.post("/",
 
 //marcar turno como atendido médico/admin
 TurnosRoutes.patch("/:id/atender",
+  autenticarUsuario,
+  autorizarUsuarios([1, 3]),
   [
     param('id').isNumeric().withMessage('El id debe ser numérico'),
     validarCampos
@@ -48,6 +55,8 @@ TurnosRoutes.patch("/:id/atender",
 );
 
 TurnosRoutes.delete("/:id",
+  autenticarUsuario,
+  autorizarUsuarios([1, 2, 3]),
   [
     param('id').isNumeric().withMessage('El id debe ser numérico'),
     validarCampos
@@ -57,6 +66,8 @@ TurnosRoutes.delete("/:id",
 
 //restaurar turno soft delete
 TurnosRoutes.patch("/:id/restaurar",
+  autenticarUsuario,
+  autorizarUsuarios([3]),
   [
     param('id').isNumeric().withMessage('El id debe ser numérico'),
     validarCampos
