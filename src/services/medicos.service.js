@@ -13,6 +13,10 @@ export class MedicosService {
     return await this.db.buscarPorId(id);
   };
 
+  buscarPorUsuario = async (id_usuario) => {
+    return await this.db.buscarPorUsuario(id_usuario);
+  };
+
   buscarPorMatricula = async (matricula) => {
     return await this.db.buscarPorMatricula(matricula);
   };

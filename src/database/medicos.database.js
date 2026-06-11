@@ -28,6 +28,16 @@ export class MedicosDatabase {
     return results;
   };
 
+  buscarPorUsuario = async (id_usuario) => {
+    const query = `SELECT vm.*, m.id_especialidad, e.nombre AS especialidad
+      FROM v_medicos AS vm
+      INNER JOIN medicos AS m ON vm.id_medico = m.id_medico
+      INNER JOIN especialidades AS e ON m.id_especialidad = e.id_especialidad
+      WHERE vm.id_usuario = ?`;
+    const [results] = await Database.query(query, [id_usuario]);
+    return results;
+  };
+
   buscarPorMatricula = async (matricula) => {
     const query = "SELECT * FROM medicos WHERE matricula = ?";
     const [results] = await Database.query(query, [matricula]);

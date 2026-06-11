@@ -2,12 +2,16 @@ import { Router } from "express";
 import { check, param, query } from "express-validator";
 import { validarCampos } from "../../middlewares/validarCampos.js";
 import { MedicosController } from "../../controllers/medicos.controller.js";
+import { autenticarUsuario } from "../../middlewares/autenticarUsuario.js";
+import { autorizarUsuarios } from "../../middlewares/autorizarUsuarios.js";
 
 export const MedicosRoutes = Router();
 
 const medicosController = new MedicosController();
 
 MedicosRoutes.get("/",
+  autenticarUsuario,
+  autorizarUsuarios([1, 2, 3]),
   [
     query('especialidad').optional().isNumeric().withMessage('El id de especialidad debe ser numérico'),
     validarCampos
@@ -16,6 +20,8 @@ MedicosRoutes.get("/",
 );
 
 MedicosRoutes.get("/:id",
+  autenticarUsuario,
+  autorizarUsuarios([1, 2, 3]),
   [
     param('id').isNumeric().withMessage('El id debe ser numérico'),
     validarCampos
@@ -25,6 +31,8 @@ MedicosRoutes.get("/:id",
 
 
 MedicosRoutes.put("/:id",
+  autenticarUsuario,
+  autorizarUsuarios([1, 3]),
   [
     param('id').isNumeric().withMessage('El id debe ser numérico'),
     check('id_especialidad').notEmpty().withMessage('El id de especialidad es obligatorio').isNumeric().withMessage('El id de especialidad debe ser numérico'),
@@ -37,6 +45,8 @@ MedicosRoutes.put("/:id",
 
 
 MedicosRoutes.delete("/:id",
+  autenticarUsuario,
+  autorizarUsuarios([3]),
   [
     param('id').isNumeric().withMessage('El id debe ser numérico'),
     validarCampos
