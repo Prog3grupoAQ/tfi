@@ -46,5 +46,11 @@ export class MedicosService {
     if (!existe || existe.length === 0) return null;
     return await this.db.eliminar(existe[0].id_usuario);
   };
-  
+
+  asociarObrasSociales = async (id_medico, obras_sociales) => {
+    const existe = await this.buscarPorId(id_medico);
+    if (!existe || existe.length === 0) return null;
+
+    return await this.db.asociarObrasSociales(id_medico, obras_sociales);
+  };
 }

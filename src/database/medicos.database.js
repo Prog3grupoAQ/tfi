@@ -66,4 +66,42 @@ export class MedicosDatabase {
     const [result] = await Database.query(query, [id]);
     return result;
   };
+
+  asociarObrasSociales = async (id_medico, obras_sociales) => {
+    const connection = await Database.getConnection();
+    try {
+      await connection.beginTransaction();
+
+      for (const id_obra_social of obras_sociales) {
+        const [os] = await connection.query(
+          "SELECT id_obra_social FROM obras_sociales WHERE id_obra_social = ? AND activo = 1",
+          [id_obra_social]
+        );
+        if (os.length === 0) {
+          await connection.rollback();
+          return null;
+        }
+      }
+
+      await connection.query(
+        "UPDATE medicos_obras_sociales SET activo = 0 WHERE id_medico = ? AND activo = 1",
+        [id_medico]
+      );
+
+      for (const id_obra_social of obras_sociales) {
+        await connection.query(
+          "INSERT INTO medicos_obras_sociales (id_medico, id_obra_social) VALUES (?, ?)",
+          [id_medico, id_obra_social]
+        );
+      }
+
+      await connection.commit();
+      return true;
+    } catch (error) {
+      await connection.rollback();
+      throw error;
+    } finally {
+      connection.release();
+    }
+  };
 }
