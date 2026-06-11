@@ -102,4 +102,21 @@ export class MedicosController {
       return res.status(500).json({ estado: false, msg: "Error interno del servidor" });
     }
   };
+
+  asociarObrasSociales = async (req, res) => {
+    try {
+      const { id_medico } = req.params;
+      const { obras_sociales } = req.body;
+
+      const resultado = await this.medicos.asociarObrasSociales(id_medico, obras_sociales);
+
+      if (!resultado)
+        return res.status(400).json({ estado: false, msg: "No se crearon las relaciones" });
+
+      return res.status(201).json({ estado: true, msg: "Médico y obras sociales relacionadas" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ estado: false, msg: "Error interno del servidor" });
+    }
+  };
 }

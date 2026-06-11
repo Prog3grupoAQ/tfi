@@ -42,7 +42,8 @@ export class RegistroController {
 
   registrarPaciente = async (req, res) => {
     try {
-      const { documento, apellido, nombres, email, contrasenia, id_obra_social } = req.body;
+      const { documento, apellido, nombres, email, contrasenia } = req.body;
+      const id_obra_social = req.body.id_obra_social ?? 1;
       const foto_path = req.file ? `uploads/${req.file.filename}` : '';
 
       const obraSocial = await this.obrasSociales.buscarPorId(id_obra_social);

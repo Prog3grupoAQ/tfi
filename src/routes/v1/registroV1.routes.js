@@ -33,7 +33,7 @@ RegistroRoutes.post("/paciente",
     check('nombres').notEmpty().withMessage('Los nombres son obligatorios'),
     check('email').notEmpty().isEmail().withMessage('El email no es válido'),
     check('contrasenia').notEmpty().withMessage('La contraseña es obligatoria'),
-    check('id_obra_social').notEmpty().isNumeric().withMessage('El id de obra social debe ser numérico'),
+    check('id_obra_social').optional().isNumeric().withMessage('El id de obra social debe ser numérico'),
     validarCampos
   ],
   registroController.registrarPaciente

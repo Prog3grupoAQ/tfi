@@ -2,7 +2,6 @@ import { Router } from "express";
 import { param, check, query } from "express-validator";
 import { validarCampos } from "../../middlewares/validarCampos.js";
 import { ObrasSocialesController } from "../../controllers/obras_sociales.controller.js";
-import { autenticarUsuario } from "../../middlewares/autenticarUsuario.js";
 import { autorizarUsuarios } from "../../middlewares/autorizarUsuarios.js";
 
 export const ObrasSocialesRoutes = Router();
@@ -10,7 +9,6 @@ export const ObrasSocialesRoutes = Router();
 const obrasSocialesController = new ObrasSocialesController();
 
 ObrasSocialesRoutes.get("/",
-  autenticarUsuario,
   autorizarUsuarios([1, 2, 3]),
   [
     query('inactivos').optional().isBoolean().withMessage('El parámetro inactivos debe ser true o false'),
@@ -20,7 +18,6 @@ ObrasSocialesRoutes.get("/",
 );
 
 ObrasSocialesRoutes.get("/:id",
-  autenticarUsuario,
   autorizarUsuarios([1, 2, 3]),
   [
     param('id').isNumeric().withMessage('El id debe ser numérico'),
@@ -30,7 +27,6 @@ ObrasSocialesRoutes.get("/:id",
 );
 
 ObrasSocialesRoutes.post("/",
-  autenticarUsuario,
   autorizarUsuarios([3]),
   [
     check('nombre').notEmpty().withMessage('El nombre es obligatorio').isString().withMessage('El nombre debe ser un texto').isLength({ min: 3, max: 120 }).withMessage('El nombre debe tener entre 3 y 120 caracteres'),
@@ -43,7 +39,6 @@ ObrasSocialesRoutes.post("/",
 );
 
 ObrasSocialesRoutes.put("/:id",
-  autenticarUsuario,
   autorizarUsuarios([3]),
   [
     param('id').isNumeric().withMessage('El id debe ser numérico'),
@@ -57,7 +52,6 @@ ObrasSocialesRoutes.put("/:id",
 );
 
 ObrasSocialesRoutes.delete("/:id",
-  autenticarUsuario,
   autorizarUsuarios([3]),
   [
     param('id').isNumeric().withMessage('El id debe ser numérico'),
@@ -67,7 +61,6 @@ ObrasSocialesRoutes.delete("/:id",
 );
 
 ObrasSocialesRoutes.patch("/:id",
-  autenticarUsuario,
   autorizarUsuarios([3]),
   [
     param('id').isNumeric().withMessage('El id debe ser numérico'),

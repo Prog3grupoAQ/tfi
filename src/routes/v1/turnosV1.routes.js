@@ -2,7 +2,6 @@ import { Router } from "express";
 import { param, check, query } from "express-validator";
 import { validarCampos } from "../../middlewares/validarCampos.js";
 import { TurnosReservasController } from "../../controllers/turnos_reservas.controller.js";
-import { autenticarUsuario } from "../../middlewares/autenticarUsuario.js";
 import { autorizarUsuarios } from "../../middlewares/autorizarUsuarios.js";
 
 export const TurnosRoutes = Router();
@@ -10,7 +9,6 @@ export const TurnosRoutes = Router();
 const turnosController = new TurnosReservasController();
 
 TurnosRoutes.get("/",
-  autenticarUsuario,
   autorizarUsuarios([1, 2, 3]),
   [
     query('medico').optional().isNumeric().withMessage('El id de médico debe ser numérico'),
@@ -21,7 +19,6 @@ TurnosRoutes.get("/",
 );
 
 TurnosRoutes.get("/:id",
-  autenticarUsuario,
   autorizarUsuarios([1, 2, 3]),
   [
     param('id').isNumeric().withMessage('El id debe ser numérico'),
@@ -31,7 +28,6 @@ TurnosRoutes.get("/:id",
 );
 
 TurnosRoutes.post("/",
-  autenticarUsuario,
   autorizarUsuarios([2, 3]),
   [
     check('id_medico').notEmpty().withMessage('El id de médico es obligatorio').isNumeric().withMessage('El id de médico debe ser numérico'),
@@ -45,7 +41,6 @@ TurnosRoutes.post("/",
 
 //marcar turno como atendido médico/admin
 TurnosRoutes.patch("/:id/atender",
-  autenticarUsuario,
   autorizarUsuarios([1, 3]),
   [
     param('id').isNumeric().withMessage('El id debe ser numérico'),
@@ -55,7 +50,6 @@ TurnosRoutes.patch("/:id/atender",
 );
 
 TurnosRoutes.delete("/:id",
-  autenticarUsuario,
   autorizarUsuarios([1, 2, 3]),
   [
     param('id').isNumeric().withMessage('El id debe ser numérico'),
@@ -66,7 +60,6 @@ TurnosRoutes.delete("/:id",
 
 //restaurar turno soft delete
 TurnosRoutes.patch("/:id/restaurar",
-  autenticarUsuario,
   autorizarUsuarios([3]),
   [
     param('id').isNumeric().withMessage('El id debe ser numérico'),
