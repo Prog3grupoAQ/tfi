@@ -3,6 +3,8 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import fs from "fs"
+import swaggerUi from "swagger-ui-express";
+import { specs } from "./config/swagger.js";
 import { EspecialidadesRoutes } from "./routes/v1/especialidadesV1.routes.js";
 import { ObrasSocialesRoutes } from "./routes/v1/obrasSocialesV1.routes.js";
 import { autenticarUsuario } from "./middlewares/autenticarUsuario.js";
@@ -41,6 +43,8 @@ export class Server {
   }
 
   routes() {
+    this.app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(specs));
+
     // Estas van aun auth
     this.app.use("/api/v1/auth", AuthRoutes);
     this.app.use("/api/v1/registro", RegistroRoutes);
