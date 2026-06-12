@@ -25,12 +25,60 @@ DELIMITER $$
 --
 -- Procedimientos
 --
-CREATE DEFINER=`root`@`localhost` PROCEDURE `especialidades_x_turnos` ()   select count(e.id_especialidad) as cant_esp, e.nombre
-from turnos_reservas as tr 
-inner join medicos as m on m.id_medico = tr.id_medico
-inner join especialidades as e on e.id_especialidad = m.id_especialidad
-GROUP by e.nombre
-HAVING cant_esp > 1$$
+CREATE DEFINER=`root`@`localhost` PROCEDURE `especialidades_x_turnos` ()
+BEGIN
+  SELECT COUNT(e.id_especialidad) AS cant_esp,
+         e.nombre
+  FROM turnos_reservas AS tr
+  INNER JOIN medicos AS m ON m.id_medico = tr.id_medico
+  INNER JOIN especialidades AS e ON e.id_especialidad = m.id_especialidad
+  GROUP BY e.nombre
+  HAVING cant_esp > 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `especialidades_turnos_mes_anterior` ()
+BEGIN
+    SELECT
+        e.nombre AS especialidad,
+        COUNT(tr.id_turno_reserva) AS cantidad_turnos
+    FROM especialidades e
+    LEFT JOIN medicos m
+        ON m.id_especialidad = e.id_especialidad
+    LEFT JOIN turnos_reservas tr
+        ON tr.id_medico = m.id_medico
+        AND tr.atendido = 1
+        AND tr.fecha_hora >= DATE_FORMAT(
+            DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH),
+            '%Y-%m-01'
+        )
+        AND tr.fecha_hora < DATE_FORMAT(
+            CURRENT_DATE,
+            '%Y-%m-01'
+        )
+    GROUP BY e.id_especialidad, e.nombre
+    ORDER BY cantidad_turnos DESC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `obras_sociales_turnos_mes_anterior` ()
+BEGIN
+    SELECT
+        os.nombre AS obra_social,
+        COUNT(tr.id_turno_reserva) AS cantidad_turnos
+    FROM obras_sociales os
+    LEFT JOIN turnos_reservas tr
+        ON tr.id_obra_social = os.id_obra_social
+        AND tr.atendido = 1
+        AND tr.fecha_hora >= DATE_FORMAT(
+            DATE_SUB(CURRENT_DATE, INTERVAL 1 MONTH),
+            '%Y-%m-01'
+        )
+        AND tr.fecha_hora < DATE_FORMAT(
+            CURRENT_DATE,
+            '%Y-%m-01'
+        )
+    GROUP BY os.id_obra_social, os.nombre
+    ORDER BY cantidad_turnos DESC;
+END$$
 
 DELIMITER ;
 
@@ -255,16 +303,6 @@ CREATE TABLE `v_pacientes` (
 DROP TABLE IF EXISTS `v_medicos`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_medicos`  AS SELECT `m`.`id_medico` AS `id_medico`, `m`.`id_usuario` AS `id_usuario`, `u`.`apellido` AS `apellido`, `u`.`nombres` AS `nombres`, `m`.`matricula` AS `matricula`, `m`.`descripcion` AS `descripcion`, `m`.`valor_consulta` AS `valor_consulta`, `u`.`email` AS `email`,  `u`.`foto_path` AS `foto_path` FROM ((`medicos` `m` join `usuarios` `u` on(`m`.`id_usuario` = `u`.`id_usuario`)) ) WHERE `u`.`activo` = 1 ;
--- --------------------------------------------------------
-
---
--- Estructura para la vista `v_medicos_2`
---
-DROP TABLE IF EXISTS `v_medicos_2`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_medicos_2`  AS SELECT `m`.`id_medico` AS `id_medico`, `m`.`id_usuario` AS `id_usuario`, `u`.`apellido` AS `apellido`, `u`.`nombres` AS `nombres`, `m`.`matricula` AS `matricula`, `m`.`descripcion` AS `descripcion`, `m`.`valor_consulta` AS `valor_consulta`, `u`.`email` AS `email`,  `u`.`foto_path` AS `foto_path` FROM ((`medicos` `m` join `usuarios` `u` on(`m`.`id_usuario` = `u`.`id_usuario`)) ) WHERE `u`.`activo` = 1 ;
-
--- --------------------------------------------------------
 
 --
 -- Estructura para la vista `v_pacientes`
