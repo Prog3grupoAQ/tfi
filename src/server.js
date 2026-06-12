@@ -11,6 +11,7 @@ import { RegistroRoutes } from "./routes/v1/registroV1.routes.js";
 import { MedicosRoutes } from "./routes/v1/medicosV1.routes.js";
 import { TurnosRoutes } from "./routes/v1/turnosV1.routes.js";
 import { AuthRoutes } from "./routes/v1/authV1.routes.js";
+import { InformesRoutes } from "./routes/v1/informesV1.routes.js";
 
 
 
@@ -50,6 +51,7 @@ export class Server {
     this.app.use("/api/v1/obras_sociales", autenticarUsuario, ObrasSocialesRoutes);
     this.app.use("/api/v1/pacientes",      autenticarUsuario, PacientesRoutes);
     this.app.use("/api/v1/turnos",         autenticarUsuario, TurnosRoutes);
+    this.app.use("/api/v1/informes",       InformesRoutes);
   }
 
   listen() {
