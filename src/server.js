@@ -55,7 +55,7 @@ export class Server {
     this.app.use("/api/v1/obras_sociales", autenticarUsuario, ObrasSocialesRoutes);
     this.app.use("/api/v1/pacientes",      autenticarUsuario, PacientesRoutes);
     this.app.use("/api/v1/turnos",         autenticarUsuario, TurnosRoutes);
-    this.app.use("/api/v1/informes",       InformesRoutes);
+    this.app.use("/api/v1/informes",       autenticarUsuario, InformesRoutes);
   }
 
   listen() {

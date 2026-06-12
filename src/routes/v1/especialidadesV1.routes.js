@@ -8,7 +8,84 @@ export const EspecialidadesRoutes = Router();
 
 const especialidadesController = new EspecialidadesController();
 
+/**
+ * @swagger
+ * tags:
+ *   name: Especialidades
+ *   description: Gestión de especialidades médicas
+ */
 
+/**
+ * @swagger
+ * /especialidades:
+ *   get:
+ *     summary: Listar todas las especialidades
+ *     tags: [Especialidades]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: query
+ *         name: inactivos
+ *         schema:
+ *           type: boolean
+ *         description: Incluir especialidades inactivas
+ *     responses:
+ *       200:
+ *         description: Lista de especialidades
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 estado:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/Especialidad'
+ *       401:
+ *         description: No autenticado
+ *   post:
+ *     summary: Crear una nueva especialidad
+ *     tags: [Especialidades]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [nombre]
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 minLength: 3
+ *                 maxLength: 120
+ *                 example: "Neurología"
+ *     responses:
+ *       201:
+ *         description: Especialidad creada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 estado:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/Especialidad'
+ *       400:
+ *         description: Datos inválidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       403:
+ *         description: Sin permisos (requiere rol admin)
+ */
 EspecialidadesRoutes.get("/",
   autorizarUsuarios([1, 2, 3]),
   [
@@ -18,7 +95,150 @@ EspecialidadesRoutes.get("/",
   especialidadesController.listarTodas
 );
 
-EspecialidadesRoutes.get('/:id', 
+/**
+ * @swagger
+ * /especialidades/{id}:
+ *   get:
+ *     summary: Obtener una especialidad por ID
+ *     tags: [Especialidades]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *         description: ID de la especialidad
+ *     responses:
+ *       200:
+ *         description: Especialidad encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 estado:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/Especialidad'
+ *       404:
+ *         description: Especialidad no encontrada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *   put:
+ *     summary: Actualizar una especialidad
+ *     tags: [Especialidades]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [nombre]
+ *             properties:
+ *               nombre:
+ *                 type: string
+ *                 minLength: 3
+ *                 maxLength: 120
+ *                 example: "Neurología"
+ *               activo:
+ *                 type: boolean
+ *                 example: true
+ *     responses:
+ *       200:
+ *         description: Especialidad actualizada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 estado:
+ *                   type: boolean
+ *                   example: true
+ *                 data:
+ *                   $ref: '#/components/schemas/Especialidad'
+ *       400:
+ *         description: Datos inválidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       403:
+ *         description: Sin permisos (requiere rol admin)
+ *       404:
+ *         description: Especialidad no encontrada
+ *   delete:
+ *     summary: Eliminar una especialidad (soft delete)
+ *     tags: [Especialidades]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Especialidad eliminada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 estado:
+ *                   type: boolean
+ *                   example: true
+ *                 mensaje:
+ *                   type: string
+ *                   example: "Especialidad eliminada correctamente"
+ *       403:
+ *         description: Sin permisos (requiere rol admin)
+ *       404:
+ *         description: Especialidad no encontrada
+ *   patch:
+ *     summary: Restaurar una especialidad eliminada
+ *     tags: [Especialidades]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         schema:
+ *           type: integer
+ *     responses:
+ *       200:
+ *         description: Especialidad restaurada
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 estado:
+ *                   type: boolean
+ *                   example: true
+ *                 mensaje:
+ *                   type: string
+ *                   example: "Especialidad restaurada correctamente"
+ *       403:
+ *         description: Sin permisos (requiere rol admin)
+ *       404:
+ *         description: Especialidad no encontrada
+ */
+EspecialidadesRoutes.get('/:id',
   autorizarUsuarios([1, 2, 3]),
   [
     param('id').isNumeric().withMessage('El id debe ser numerico'), 
@@ -47,7 +267,7 @@ EspecialidadesRoutes.put('/:id',
   especialidadesController.editar
 );
 
-EspecialidadesRoutes.delete("/:id", 
+EspecialidadesRoutes.delete("/:id",
   autorizarUsuarios([3]),
   [
     param('id').isNumeric().withMessage('El id debe ser numerico'),
