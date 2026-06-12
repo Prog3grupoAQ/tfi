@@ -6,10 +6,12 @@ import fs from "fs"
 import { EspecialidadesRoutes } from "./routes/v1/especialidadesV1.routes.js";
 import { ObrasSocialesRoutes } from "./routes/v1/obrasSocialesV1.routes.js";
 import { autenticarUsuario } from "./middlewares/autenticarUsuario.js";
+import { auditoriaMiddleware } from "./middlewares/auditoria.js";
 import { PacientesRoutes } from "./routes/v1/pacientesV1.routes.js";
 import { RegistroRoutes } from "./routes/v1/registroV1.routes.js";
 import { MedicosRoutes } from "./routes/v1/medicosV1.routes.js";
 import { TurnosRoutes } from "./routes/v1/turnosV1.routes.js";
+import { AuditoriaRoutes } from "./routes/v1/auditoriaV1.routes.js";
 import { AuthRoutes } from "./routes/v1/authV1.routes.js";
 
 
@@ -28,6 +30,7 @@ export class Server {
     this.app.use(express.json());
     this.app.use("/uploads", express.static("uploads"));
     this.app.use(passport.initialize());
+    this.app.use(auditoriaMiddleware);
   }
 
   logs(){
@@ -50,6 +53,7 @@ export class Server {
     this.app.use("/api/v1/obras_sociales", autenticarUsuario, ObrasSocialesRoutes);
     this.app.use("/api/v1/pacientes",      autenticarUsuario, PacientesRoutes);
     this.app.use("/api/v1/turnos",         autenticarUsuario, TurnosRoutes);
+    this.app.use("/api/v1/auditoria",     autenticarUsuario, AuditoriaRoutes);
   }
 
   listen() {

@@ -2,6 +2,7 @@ import { UsuariosService } from "../services/usuarios.service.js";
 import { MedicosService } from "../services/medicos.service.js";
 import { PacientesService } from "../services/pacientes.service.js";
 import { ObrasSocialesService } from "../services/obras_sociales.service.js";
+import { AuditoriaService } from "../services/auditoria.service.js";
 
 export class RegistroController {
   constructor() {
@@ -9,6 +10,7 @@ export class RegistroController {
     this.medicos = new MedicosService();
     this.pacientes = new PacientesService();
     this.obrasSociales = new ObrasSocialesService();
+    this.auditoria = new AuditoriaService();
   }
 
   registrarMedico = async (req, res) => {
@@ -32,6 +34,17 @@ export class RegistroController {
         return res.status(409).json({ estado: false, msg: "Ya existe un médico con esa matrícula" });
       if (!nuevoMedico || nuevoMedico.length === 0)
         return res.status(500).json({ estado: false, msg: "No se pudo crear el médico" });
+
+      // registro auditoria de registro de médico
+      this.auditoria.registrar({
+        id_usuario: resultadoUsuario,
+        email,
+        accion: `Se registró ${email} como médico`,
+        metodo: req.method,
+        endpoint: req.originalUrl,
+        status_code: 201,
+        ip: req.ip,
+      }).catch(e => console.error("Error en auditoría:", e.message));
 
       return res.status(201).json({ estado: true, msg: "Médico registrado correctamente", data: nuevoMedico[0] });
     } catch (error) {
@@ -63,6 +76,17 @@ export class RegistroController {
         return res.status(409).json({ estado: false, msg: "Ya existe un paciente con ese usuario" });
       if (!nuevoPaciente || nuevoPaciente.length === 0)
         return res.status(500).json({ estado: false, msg: "No se pudo crear el paciente" });
+
+      // registro auditoria de registro de paciente
+      this.auditoria.registrar({
+        id_usuario: resultadoUsuario,
+        email,
+        accion: `Se registró ${email} como paciente`,
+        metodo: req.method,
+        endpoint: req.originalUrl,
+        status_code: 201,
+        ip: req.ip,
+      }).catch(e => console.error("Error en auditoría:", e.message));
 
       return res.status(201).json({ estado: true, msg: "Paciente registrado correctamente", data: nuevoPaciente[0] });
     } catch (error) {
