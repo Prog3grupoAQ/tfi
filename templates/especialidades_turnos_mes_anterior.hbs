@@ -13,12 +13,16 @@
       th { background: #f4f4f4; }
       tbody tr:nth-child(even) { background: #fbfbfb; }
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
     <div class="container">
       <h1>{{titulo}}</h1>
-      <div class="meta">Generado: {{fecha}}</div>
       <div>{{leyenda}}</div>
+      <div style="max-width:900px; height:320px; margin-top:20px;">
+        <canvas id="especialidadesChart"></canvas>
+      </div>
+      <div style="margin-top:20px">Tabla de detalles</div>
       <table>
         <thead>
           <tr>
@@ -36,5 +40,34 @@
         </tbody>
       </table>
     </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const labels = [{{#each filas}}"{{especialidad}}"{{#unless @last}}, {{/unless}}{{/each}}];
+        const dataValues = [{{#each filas}}{{cantidad_turnos}}{{#unless @last}}, {{/unless}}{{/each}}];
+
+        const ctx = document.getElementById('especialidadesChart').getContext('2d');
+        new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [{
+              label: 'Cantidad de turnos',
+              data: dataValues,
+              backgroundColor: 'rgba(54, 162, 235, 0.6)',
+              borderColor: 'rgba(54, 162, 235, 1)',
+              borderWidth: 1
+            }]
+          },
+          options: {
+            scales: {
+              y: { beginAtZero: true, ticks: { precision: 0 } }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+          }
+        });
+      });
+    </script>
   </body>
 </html>
