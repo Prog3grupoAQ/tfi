@@ -80,6 +80,49 @@ BEGIN
     ORDER BY cantidad_turnos DESC;
 END$$
 
+CREATE DEFINER=`root`@`localhost` PROCEDURE `turnos_completados_por_medico_mes` (IN p_id_medico INT, IN p_mes INT, IN p_anio INT)
+BEGIN
+  SELECT
+    tr.fecha_hora,
+    CONCAT(up.apellido, ', ', up.nombres) AS paciente,
+    tr.id_paciente,
+    os.nombre AS obra_social,
+    tr.valor_total
+  FROM turnos_reservas tr
+  INNER JOIN pacientes p       ON p.id_paciente      = tr.id_paciente
+  INNER JOIN usuarios up       ON up.id_usuario       = p.id_usuario
+  INNER JOIN obras_sociales os ON os.id_obra_social   = tr.id_obra_social
+  WHERE tr.id_medico           = p_id_medico
+    AND tr.atendido            = 1
+    AND tr.activo              = 1
+    AND MONTH(tr.fecha_hora)   = p_mes
+    AND YEAR(tr.fecha_hora)    = p_anio
+  ORDER BY tr.fecha_hora ASC;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `turnos_completados_por_mes` (IN p_mes INT, IN p_anio INT)
+BEGIN
+  SELECT
+    tr.fecha_hora,
+    CONCAT(um.apellido, ', ', um.nombres) AS medico,
+    e.nombre AS especialidad,
+    CONCAT(up.apellido, ', ', up.nombres) AS paciente,
+    os.nombre AS obra_social,
+    tr.valor_total
+  FROM turnos_reservas tr
+  INNER JOIN medicos m        ON m.id_medico         = tr.id_medico
+  INNER JOIN usuarios um      ON um.id_usuario        = m.id_usuario
+  INNER JOIN especialidades e ON e.id_especialidad    = m.id_especialidad
+  INNER JOIN pacientes p      ON p.id_paciente        = tr.id_paciente
+  INNER JOIN usuarios up      ON up.id_usuario        = p.id_usuario
+  INNER JOIN obras_sociales os ON os.id_obra_social   = tr.id_obra_social
+  WHERE tr.atendido = 1
+    AND tr.activo   = 1
+    AND MONTH(tr.fecha_hora) = p_mes
+    AND YEAR(tr.fecha_hora)  = p_anio
+  ORDER BY tr.fecha_hora ASC;
+END$$
+
 DELIMITER ;
 
 -- --------------------------------------------------------

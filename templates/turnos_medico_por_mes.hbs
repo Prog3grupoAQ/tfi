@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <title>{{titulo}}</title>
+    <style>
+      body { font-family: Arial, sans-serif; margin: 0; padding: 0; color: #222; }
+      .container { padding: 24px; }
+      h1 { font-size: 18px; margin: 0 0 4px; }
+      .periodo { font-size: 12px; color: #666; margin-bottom: 20px; }
+
+      .cabecera-medico {
+        background: #f4f4f4;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        padding: 14px 18px;
+        margin-bottom: 24px;
+      }
+      .cabecera-medico h2 {
+        font-size: 15px;
+        margin: 0 0 10px;
+        color: #333;
+      }
+      .cabecera-medico .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        gap: 6px 20px;
+        font-size: 12px;
+      }
+      .cabecera-medico .campo { color: #888; font-size: 11px; }
+      .cabecera-medico .valor { font-weight: bold; }
+
+      table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+      th, td { border: 1px solid #ddd; padding: 7px 8px; text-align: left; font-size: 12px; }
+      th { background: #f4f4f4; }
+      tbody tr:nth-child(even) { background: #fbfbfb; }
+      .totales td { font-weight: bold; background: #f0f0f0; border-top: 2px solid #bbb; }
+      .sin-datos { color: #888; font-size: 13px; margin-top: 20px; }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>{{titulo}}</h1>
+      <div class="periodo">Período: {{fecha}}</div>
+
+      <div class="cabecera-medico">
+        <h2>Datos del médico</h2>
+        <div class="grid">
+          <div>
+            <div class="campo">Apellido y nombre</div>
+            <div class="valor">{{medico.apellido}}, {{medico.nombres}}</div>
+          </div>
+          <div>
+            <div class="campo">Matrícula</div>
+            <div class="valor">{{medico.matricula}}</div>
+          </div>
+          <div>
+            <div class="campo">DNI</div>
+            <div class="valor">{{medico.documento}}</div>
+          </div>
+          <div>
+            <div class="campo">Email</div>
+            <div class="valor">{{medico.email}}</div>
+          </div>
+          <div>
+            <div class="campo">Especialidad</div>
+            <div class="valor">{{medico.especialidad}}</div>
+          </div>
+          <div>
+            <div class="campo">Valor de consulta</div>
+            <div class="valor">$ {{medico.valor_consulta}}</div>
+          </div>
+        </div>
+      </div>
+
+      {{#if filas.length}}
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha y hora</th>
+            <th>Paciente</th>
+            <th>ID Paciente</th>
+            <th>Obra social</th>
+            <th>Monto total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{#each filas}}
+            <tr>
+              <td>{{fecha_hora}}</td>
+              <td>{{paciente}}</td>
+              <td>{{id_paciente}}</td>
+              <td>{{obra_social}}</td>
+              <td>$ {{valor_total}}</td>
+            </tr>
+          {{/each}}
+        </tbody>
+        <tfoot>
+          <tr class="totales">
+            <td colspan="4">Total de turnos: {{totalTurnos}}</td>
+            <td>$ {{totalMonto}}</td>
+          </tr>
+        </tfoot>
+      </table>
+      {{else}}
+        <p class="sin-datos">No se registraron turnos completados para este médico en el período seleccionado.</p>
+      {{/if}}
+    </div>
+  </body>
+</html>
