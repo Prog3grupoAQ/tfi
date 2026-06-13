@@ -3,6 +3,8 @@ import express from "express";
 import morgan from "morgan";
 import cors from "cors";
 import fs from "fs"
+import swaggerUi from "swagger-ui-express";
+import { specs } from "./config/swagger.js";
 import { EspecialidadesRoutes } from "./routes/v1/especialidadesV1.routes.js";
 import { ObrasSocialesRoutes } from "./routes/v1/obrasSocialesV1.routes.js";
 import { autenticarUsuario } from "./middlewares/autenticarUsuario.js";
@@ -13,6 +15,7 @@ import { MedicosRoutes } from "./routes/v1/medicosV1.routes.js";
 import { TurnosRoutes } from "./routes/v1/turnosV1.routes.js";
 import { AuditoriaRoutes } from "./routes/v1/auditoriaV1.routes.js";
 import { AuthRoutes } from "./routes/v1/authV1.routes.js";
+import { InformesRoutes } from "./routes/v1/informesV1.routes.js";
 
 
 
@@ -43,6 +46,8 @@ export class Server {
   }
 
   routes() {
+    this.app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(specs));
+
     // Estas van aun auth
     this.app.use("/api/v1/auth", AuthRoutes);
     this.app.use("/api/v1/registro", RegistroRoutes);
@@ -54,6 +59,7 @@ export class Server {
     this.app.use("/api/v1/pacientes",      autenticarUsuario, PacientesRoutes);
     this.app.use("/api/v1/turnos",         autenticarUsuario, TurnosRoutes);
     this.app.use("/api/v1/auditoria",     autenticarUsuario, AuditoriaRoutes);
+    this.app.use("/api/v1/informes",       autenticarUsuario, InformesRoutes);
   }
 
   listen() {
