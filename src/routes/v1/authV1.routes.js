@@ -35,10 +35,10 @@ const authController = new AuthController();
  *               email:
  *                 type: string
  *                 format: email
- *                 example: usuario@ejemplo.com
+ *                 example: ferben@correo.com
  *               contrasenia:
  *                 type: string
- *                 example: "12345678"
+ *                 example: "ferben"
  *     responses:
  *       200:
  *         description: Login exitoso
