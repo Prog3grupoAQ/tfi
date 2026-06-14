@@ -8,8 +8,13 @@ import { AuditoriaService } from "../services/auditoria.service.js";
 export const auditoriaMiddleware = (req, res, next) => {
   res.on("finish", async () => {
     try {
-      // solo registrar si el usuario está autenticado
-      if (!req.user) return;
+      // solo registrar si el usuario está autenticado y tiene email
+      if (!req.user || !req.user.email) return;
+
+      // evito duplicar registros de login y registro que se auditan manualmente
+      if (req.originalUrl.includes("/auth/login") || req.originalUrl.includes("/registro")) {
+        return;
+      }
 
       const auditoriaService = new AuditoriaService();
       await auditoriaService.registrar({
