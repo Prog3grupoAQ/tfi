@@ -1,0 +1,15 @@
+meta {
+  name: Total Obras Sociales Mes Anterior
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/informes/total_os_anterior
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

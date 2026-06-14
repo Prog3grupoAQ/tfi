@@ -1,0 +1,19 @@
+meta {
+  name: Restaurar Especialidad
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{baseUrl}}/especialidades/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: 1
+}
+
+auth:bearer {
+  token: {{token}}
+}

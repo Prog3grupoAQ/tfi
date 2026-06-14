@@ -1,0 +1,27 @@
+meta {
+  name: Editar Médico
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{baseUrl}}/medicos/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id: 1
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "id_especialidad": 1,
+    "valor_consulta": 6000.00,
+    "descripcion": "Especialista en cardiología infantil"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "TFI Turnos y Auditoría",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}

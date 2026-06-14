@@ -1,0 +1,21 @@
+meta {
+  name: Turnos Médico por Mes-Año
+  type: http
+  seq: 4
+}
+
+get {
+  url: {{baseUrl}}/informes/turnos_medico
+  body: none
+  auth: bearer
+}
+
+params:query {
+  id_medico: 1
+  mes: 6
+  anio: 2026
+}
+
+auth:bearer {
+  token: {{token}}
+}

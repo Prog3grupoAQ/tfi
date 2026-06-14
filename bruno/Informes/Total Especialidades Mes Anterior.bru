@@ -1,0 +1,15 @@
+meta {
+  name: Total Especialidades Mes Anterior
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/informes/total_es_anterior
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}

@@ -1,0 +1,19 @@
+meta {
+  name: Restaurar Turno
+  type: http
+  seq: 6
+}
+
+patch {
+  url: {{baseUrl}}/turnos/:id/restaurar
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: 8
+}
+
+auth:bearer {
+  token: {{token}}
+}

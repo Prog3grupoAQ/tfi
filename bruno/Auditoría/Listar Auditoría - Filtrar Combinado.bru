@@ -1,0 +1,21 @@
+meta {
+  name: Listar Auditoría - Filtrar Combinado
+  type: http
+  seq: 5
+}
+
+get {
+  url: {{baseUrl}}/auditoria
+  body: none
+  auth: bearer
+}
+
+params:query {
+  email: ferben
+  accion: accedió
+  limite: 5
+}
+
+auth:bearer {
+  token: {{token}}
+}

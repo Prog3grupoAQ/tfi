@@ -1,0 +1,24 @@
+meta {
+  name: Crear Turno
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/turnos
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "id_medico": 1,
+    "id_paciente": 5,
+    "id_obra_social": 1,
+    "fecha_hora": "2026-07-20T10:00:00"
+  }
+}

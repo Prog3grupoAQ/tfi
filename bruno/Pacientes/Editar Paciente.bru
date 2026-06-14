@@ -1,0 +1,25 @@
+meta {
+  name: Editar Paciente
+  type: http
+  seq: 3
+}
+
+put {
+  url: {{baseUrl}}/pacientes/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id: 1
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "id_obra_social": 2
+  }
+}

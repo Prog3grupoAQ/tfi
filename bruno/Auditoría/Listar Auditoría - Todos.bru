@@ -1,0 +1,19 @@
+meta {
+  name: Listar Auditoría - Todos
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/auditoria
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~limite: 10
+}
+
+auth:bearer {
+  token: {{token}}
+}

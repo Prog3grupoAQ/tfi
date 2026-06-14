@@ -1,0 +1,25 @@
+meta {
+  name: Asociar Obras Sociales
+  type: http
+  seq: 5
+}
+
+post {
+  url: {{baseUrl}}/medicos/:id_medico/obras-sociales
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id_medico: 1
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "obras_sociales": [1, 2]
+  }
+}

@@ -1,0 +1,21 @@
+meta {
+  name: Registrar Paciente
+  type: http
+  seq: 2
+}
+
+post {
+  url: {{baseUrl}}/registro/paciente
+  body: multipartForm
+  auth: none
+}
+
+body:multipart-form {
+  documento: 40987654
+  apellido: López
+  nombres: María Elena
+  email: lopez@ejemplo.com
+  contrasenia: 12345678
+  id_obra_social: 1
+  ~foto: 
+}

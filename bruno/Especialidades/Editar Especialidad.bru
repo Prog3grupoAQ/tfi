@@ -1,0 +1,26 @@
+meta {
+  name: Editar Especialidad
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/especialidades/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id: 1
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "nombre": "Pediatría Neonatal",
+    "activo": true
+  }
+}

@@ -1,0 +1,19 @@
+meta {
+  name: Listar Especialidades
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/especialidades
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~inactivos: true
+}
+
+auth:bearer {
+  token: {{token}}
+}

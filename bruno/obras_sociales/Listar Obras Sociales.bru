@@ -1,0 +1,19 @@
+meta {
+  name: Listar Obras Sociales
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/obras_sociales
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~inactivos: true
+}
+
+auth:bearer {
+  token: {{token}}
+}

@@ -1,0 +1,19 @@
+meta {
+  name: Listar Médicos
+  type: http
+  seq: 1
+}
+
+get {
+  url: {{baseUrl}}/medicos
+  body: none
+  auth: bearer
+}
+
+params:query {
+  ~especialidad: 1
+}
+
+auth:bearer {
+  token: {{token}}
+}

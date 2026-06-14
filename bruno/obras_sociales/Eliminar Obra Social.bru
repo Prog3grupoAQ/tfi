@@ -1,0 +1,19 @@
+meta {
+  name: Eliminar Obra Social
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/obras_sociales/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: 1
+}
+
+auth:bearer {
+  token: {{token}}
+}

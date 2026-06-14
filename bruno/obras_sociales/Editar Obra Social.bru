@@ -1,0 +1,28 @@
+meta {
+  name: Editar Obra Social
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{baseUrl}}/obras_sociales/:id
+  body: json
+  auth: bearer
+}
+
+params:path {
+  id: 1
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "nombre": "OSDE 310",
+    "descripcion": "Plan de salud OSDE 310 modificado",
+    "porcentaje_descuento": 0.30,
+    "es_particular": false
+  }
+}

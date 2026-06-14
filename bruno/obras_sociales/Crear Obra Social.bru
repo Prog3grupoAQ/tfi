@@ -1,0 +1,24 @@
+meta {
+  name: Crear Obra Social
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{baseUrl}}/obras_sociales
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: {{token}}
+}
+
+body:json {
+  {
+    "nombre": "OSDE 210",
+    "descripcion": "Plan de salud OSDE 210",
+    "porcentaje_descuento": 0.20,
+    "es_particular": false
+  }
+}

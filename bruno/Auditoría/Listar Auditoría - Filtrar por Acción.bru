@@ -1,0 +1,20 @@
+meta {
+  name: Listar Auditoría - Filtrar por Acción
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/auditoria
+  body: none
+  auth: bearer
+}
+
+params:query {
+  accion: accedió
+  ~limite: 10
+}
+
+auth:bearer {
+  token: {{token}}
+}

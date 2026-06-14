@@ -1,0 +1,19 @@
+meta {
+  name: Marcar Turno Atendido
+  type: http
+  seq: 4
+}
+
+patch {
+  url: {{baseUrl}}/turnos/:id/atender
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: 22
+}
+
+auth:bearer {
+  token: {{token}}
+}

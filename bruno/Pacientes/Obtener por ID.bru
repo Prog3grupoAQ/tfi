@@ -1,0 +1,19 @@
+meta {
+  name: Obtener por ID
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{baseUrl}}/pacientes/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: 1
+}
+
+auth:bearer {
+  token: {{token}}
+}

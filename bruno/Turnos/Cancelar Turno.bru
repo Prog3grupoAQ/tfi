@@ -1,0 +1,19 @@
+meta {
+  name: Cancelar Turno
+  type: http
+  seq: 5
+}
+
+delete {
+  url: {{baseUrl}}/turnos/:id
+  body: none
+  auth: bearer
+}
+
+params:path {
+  id: 8
+}
+
+auth:bearer {
+  token: {{token}}
+}

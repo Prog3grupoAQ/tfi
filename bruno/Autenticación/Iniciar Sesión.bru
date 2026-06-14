@@ -1,0 +1,32 @@
+meta {
+  name: Iniciar Sesión
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{baseUrl}}/auth/login
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "email": "ferben@correo.com",
+    "contrasenia": "ferben"
+  }
+}
+
+docs {
+  Credenciales de prueba:
+  1. Admin (rol 3): ferben@correo.com / ferben
+  2. Médico (rol 1): lopmar@correo.com / lopmar (id_medico: 1)
+  3. Paciente (rol 2): rodjuap0@email-ejemplo.com / rodjuap0 (id_paciente: 5)
+}
+
+script:post-response {
+  if (res.status === 200 && res.body.token) {
+    bru.setEnvVar("token", res.body.token);
+  }
+}
+
