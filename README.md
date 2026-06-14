@@ -27,4 +27,4 @@ Hasta el momento, hemos utilizado las siguientes tecnologías:
 - MySQL
 - Morgan
 - Multer
-
+- Swagger
