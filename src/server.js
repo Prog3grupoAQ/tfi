@@ -48,7 +48,7 @@ export class Server {
   routes() {
     this.app.use("/api/v1/docs", swaggerUi.serve, swaggerUi.setup(specs));
 
-    // Estas van aun auth
+    // Estas van sin auth
     this.app.use("/api/v1/auth", AuthRoutes);
     this.app.use("/api/v1/registro", RegistroRoutes);
 

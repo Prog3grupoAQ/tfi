@@ -94,4 +94,33 @@ export class RegistroController {
       return res.status(500).json({ estado: false, msg: "Error interno del servidor" });
     }
   };
+
+  registrarAdmin = async (req, res) => {
+    try {
+      const { documento, apellido, nombres, email, contrasenia } = req.body;
+
+      const resultadoUsuario = await this.usuarios.crear({
+        documento, apellido, nombres, email, contrasenia, foto_path: '', rol: 3
+      });
+      if (resultadoUsuario?.duplicado)
+        return res.status(409).json({ estado: false, msg: "Ya existe un usuario con ese documento o email" });
+      if (!resultadoUsuario)
+        return res.status(500).json({ estado: false, msg: "No se pudo crear el administrador" });
+
+      this.auditoria.registrar({
+        id_usuario: resultadoUsuario,
+        email,
+        accion: `Se registró ${email} como administrador`,
+        metodo: req.method,
+        endpoint: req.originalUrl,
+        status_code: 201,
+        ip: req.ip,
+      }).catch(e => console.error("Error en auditoría:", e.message));
+
+      return res.status(201).json({ estado: true, msg: "Administrador registrado correctamente" });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ estado: false, msg: "Error interno del servidor" });
+    }
+  };
 }

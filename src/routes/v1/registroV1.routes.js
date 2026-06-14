@@ -3,6 +3,8 @@ import { check } from "express-validator";
 import { validarCampos } from "../../middlewares/validarCampos.js";
 import { uploadSingle } from "../../middlewares/upload.js";
 import { RegistroController } from "../../controllers/registro.controller.js";
+import { autenticarUsuario } from "../../middlewares/autenticarUsuario.js";
+import { autorizarUsuarios } from "../../middlewares/autorizarUsuarios.js";
 
 export const RegistroRoutes = Router();
 
@@ -167,4 +169,77 @@ RegistroRoutes.post("/paciente",
     validarCampos
   ],
   registroController.registrarPaciente
+);
+
+/**
+ * @swagger
+ * /registro/admin:
+ *   post:
+ *     summary: Registrar un nuevo administrador
+ *     tags: [Registro]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [documento, apellido, nombres, email, contrasenia]
+ *             properties:
+ *               documento:
+ *                 type: string
+ *                 example: "20111222"
+ *               apellido:
+ *                 type: string
+ *                 example: "Rodríguez"
+ *               nombres:
+ *                 type: string
+ *                 example: "Juan Carlos"
+ *               email:
+ *                 type: string
+ *                 format: email
+ *                 example: "admin@ejemplo.com"
+ *               contrasenia:
+ *                 type: string
+ *                 example: "12345678"
+ *     responses:
+ *       201:
+ *         description: Administrador registrado exitosamente
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 estado:
+ *                   type: boolean
+ *                   example: true
+ *                 msg:
+ *                   type: string
+ *                   example: "Administrador registrado correctamente"
+ *       400:
+ *         description: Datos inválidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       401:
+ *         description: No autenticado
+ *       403:
+ *         description: Sin permisos (requiere rol admin)
+ *       409:
+ *         description: Ya existe un usuario con ese documento o email
+ */
+RegistroRoutes.post("/admin",
+  autenticarUsuario,
+  autorizarUsuarios([3]),
+  [
+    check('documento').notEmpty().withMessage('El documento es obligatorio'),
+    check('apellido').notEmpty().withMessage('El apellido es obligatorio'),
+    check('nombres').notEmpty().withMessage('Los nombres son obligatorios'),
+    check('email').notEmpty().isEmail().withMessage('El email no es válido'),
+    check('contrasenia').notEmpty().withMessage('La contraseña es obligatoria'),
+    validarCampos
+  ],
+  registroController.registrarAdmin
 );

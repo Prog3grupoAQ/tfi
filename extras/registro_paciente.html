@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro Paciente</title>
+</head>
+<body>
+  <h2>Registro de Paciente</h2>
+  <form id="form">
+    <p><label>Documento *<br><input name="documento" required></label></p>
+    <p><label>Apellido *<br><input name="apellido" required></label></p>
+    <p><label>Nombres *<br><input name="nombres" required></label></p>
+    <p><label>Email *<br><input name="email" type="email" required></label></p>
+    <p><label>Contraseña *<br><input name="contrasenia" type="password" required></label></p>
+    <p><label>Obra social<br>
+      <select name="id_obra_social">
+        <option value="">Sin obra social</option>
+        <option value="1">Particular</option>
+        <option value="6">OSER</option>
+        <option value="7">PAMI</option>
+        <option value="8">OSDE</option>
+        <option value="9">OSECAC</option>
+        <option value="10">OSUNER</option>
+        <option value="11">Federada Salud</option>
+        <option value="12">Jerárquicos Salud</option>
+        <option value="13">Swiss Medical</option>
+        <option value="14">Sancor Salud</option>
+        <option value="15">Avalian</option>
+        <option value="16">Medifé</option>
+        <option value="17">Galeno</option>
+        <option value="18">OMINT</option>
+        <option value="19">Unión Personal</option>
+        <option value="20">OSMATA</option>
+        <option value="21">OSPE</option>
+        <option value="22">OSPLAD</option>
+        <option value="23">OSDEPYM</option>
+        <option value="24">IOSFA</option>
+      </select>
+    </label></p>
+    <p><label>Foto<br><input name="foto" type="file" accept="image/*"></label></p>
+    <p><button type="submit">Registrar</button></p>
+  </form>
+  <p id="msg"></p>
+
+  <script>
+    const API = 'http://localhost:3003/api/v1';
+
+    document.getElementById('form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const body = new FormData(e.target);
+      if (!body.get('id_obra_social')) body.delete('id_obra_social');
+      if (!body.get('foto') || body.get('foto').size === 0) body.delete('foto');
+
+      const res = await fetch(`${API}/registro/paciente`, { method: 'POST', body });
+      const data = await res.json();
+      const msg = document.getElementById('msg');
+
+      if (res.ok && data.estado !== false) {
+        msg.textContent = 'Paciente registrado con éxito.';
+        e.target.reset();
+      } else {
+        msg.textContent = data.errores?.map(e => e.msg).join(', ') || data.mensaje || 'Error al registrar.';
+      }
+    });
+  </script>
+</body>
+</html>

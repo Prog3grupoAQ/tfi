@@ -1,0 +1,906 @@
+{
+  "info": {
+    "_postman_id": "b4aab397-4ba9-4559-8582-1ba1337ad922",
+    "name": "TP3 - Grupo AQ",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "18986617"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.environment.set(\"api_token\", data.data.token)"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\":\"ferben@correo.com\",\r\n    \"contrasenia\":\"ferben\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{host}}/auth/login",
+              "host": ["{{host}}"],
+              "path": ["auth", "login"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Perfil",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/auth/perfil",
+              "host": ["{{host}}"],
+              "path": ["auth", "perfil"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Registro",
+      "item": [
+        {
+          "name": "Registrar Médico",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {"key": "documento", "value": "30123456", "type": "text"},
+                {"key": "apellido", "value": "García", "type": "text"},
+                {"key": "nombres", "value": "Carlos Alberto", "type": "text"},
+                {"key": "email", "value": "garcia@ejemplo.com", "type": "text"},
+                {"key": "contrasenia", "value": "12345678", "type": "text"},
+                {"key": "id_especialidad", "value": "1", "type": "text"},
+                {"key": "matricula", "value": "12345", "type": "text"},
+                {"key": "valor_consulta", "value": "5000.00", "type": "text"},
+                {"key": "descripcion", "value": "Especialista en cardiología", "type": "text"},
+                {"key": "foto", "type": "file", "src": "", "disabled": true}
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/registro/medico",
+              "host": ["{{host}}"],
+              "path": ["registro", "medico"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Registrar Paciente",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {"key": "documento", "value": "40987654", "type": "text"},
+                {"key": "apellido", "value": "López", "type": "text"},
+                {"key": "nombres", "value": "María Elena", "type": "text"},
+                {"key": "email", "value": "lopez@ejemplo.com", "type": "text"},
+                {"key": "contrasenia", "value": "12345678", "type": "text"},
+                {"key": "id_obra_social", "value": "1", "type": "text"},
+                {"key": "foto", "type": "file", "src": "", "disabled": true}
+              ]
+            },
+            "url": {
+              "raw": "{{host}}/registro/paciente",
+              "host": ["{{host}}"],
+              "path": ["registro", "paciente"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Registrar Administrador",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"documento\": \"20111222\",\r\n    \"apellido\": \"Rodríguez\",\r\n    \"nombres\": \"Juan Carlos\",\r\n    \"email\": \"admin@ejemplo.com\",\r\n    \"contrasenia\": \"12345678\"\r\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{host}}/registro/admin",
+              "host": ["{{host}}"],
+              "path": ["registro", "admin"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Especialidades",
+      "item": [
+        {
+          "name": "Listar Especialidades",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/especialidades",
+              "host": ["{{host}}"],
+              "path": ["especialidades"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Especialidades (con inactivas)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/especialidades?inactivos=true",
+              "host": ["{{host}}"],
+              "path": ["especialidades"],
+              "query": [{"key": "inactivos", "value": "true"}]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Especialidad por ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/especialidades/1",
+              "host": ["{{host}}"],
+              "path": ["especialidades", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Especialidad",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"Neurología\"\r\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{host}}/especialidades",
+              "host": ["{{host}}"],
+              "path": ["especialidades"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Especialidad",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"Neurología Clínica\",\r\n    \"activo\": true\r\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{host}}/especialidades/1",
+              "host": ["{{host}}"],
+              "path": ["especialidades", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Especialidad",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/especialidades/1",
+              "host": ["{{host}}"],
+              "path": ["especialidades", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Restaurar Especialidad",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/especialidades/1",
+              "host": ["{{host}}"],
+              "path": ["especialidades", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Médicos",
+      "item": [
+        {
+          "name": "Listar Médicos",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/medicos",
+              "host": ["{{host}}"],
+              "path": ["medicos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Médicos (filtrar por especialidad)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/medicos?especialidad=1",
+              "host": ["{{host}}"],
+              "path": ["medicos"],
+              "query": [{"key": "especialidad", "value": "1"}]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Médico por ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/medicos/1",
+              "host": ["{{host}}"],
+              "path": ["medicos", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Médico",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id_especialidad\": 1,\r\n    \"valor_consulta\": 6000.00,\r\n    \"descripcion\": \"Especialista con 10 años de experiencia\"\r\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{host}}/medicos/1",
+              "host": ["{{host}}"],
+              "path": ["medicos", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Médico",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/medicos/1",
+              "host": ["{{host}}"],
+              "path": ["medicos", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Asociar Obras Sociales a Médico",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"obras_sociales\": [1, 2, 3]\r\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{host}}/medicos/1/obras-sociales",
+              "host": ["{{host}}"],
+              "path": ["medicos", "1", "obras-sociales"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Obras Sociales",
+      "item": [
+        {
+          "name": "Listar Obras Sociales",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/obras_sociales",
+              "host": ["{{host}}"],
+              "path": ["obras_sociales"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Obras Sociales (con inactivas)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/obras_sociales?inactivos=true",
+              "host": ["{{host}}"],
+              "path": ["obras_sociales"],
+              "query": [{"key": "inactivos", "value": "true"}]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Obra Social por ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/obras_sociales/1",
+              "host": ["{{host}}"],
+              "path": ["obras_sociales", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Obra Social",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"OSDE\",\r\n    \"descripcion\": \"Obra social privada\",\r\n    \"porcentaje_descuento\": 0.20,\r\n    \"es_particular\": false\r\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{host}}/obras_sociales",
+              "host": ["{{host}}"],
+              "path": ["obras_sociales"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Obra Social",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nombre\": \"OSDE 210\",\r\n    \"descripcion\": \"Plan 210 de OSDE\",\r\n    \"porcentaje_descuento\": 0.30,\r\n    \"es_particular\": false\r\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{host}}/obras_sociales/1",
+              "host": ["{{host}}"],
+              "path": ["obras_sociales", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Obra Social",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/obras_sociales/1",
+              "host": ["{{host}}"],
+              "path": ["obras_sociales", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Restaurar Obra Social",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/obras_sociales/1",
+              "host": ["{{host}}"],
+              "path": ["obras_sociales", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Pacientes",
+      "item": [
+        {
+          "name": "Listar Pacientes",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/pacientes",
+              "host": ["{{host}}"],
+              "path": ["pacientes"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Pacientes (filtrar por obra social)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/pacientes?obra_social=1",
+              "host": ["{{host}}"],
+              "path": ["pacientes"],
+              "query": [{"key": "obra_social", "value": "1"}]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Paciente por ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/pacientes/1",
+              "host": ["{{host}}"],
+              "path": ["pacientes", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Actualizar Paciente (obra social)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id_obra_social\": 2\r\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{host}}/pacientes/1",
+              "host": ["{{host}}"],
+              "path": ["pacientes", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Eliminar Paciente",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/pacientes/1",
+              "host": ["{{host}}"],
+              "path": ["pacientes", "1"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Turnos",
+      "item": [
+        {
+          "name": "Listar Turnos",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/turnos",
+              "host": ["{{host}}"],
+              "path": ["turnos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Turnos (filtrar por médico)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/turnos?medico=1",
+              "host": ["{{host}}"],
+              "path": ["turnos"],
+              "query": [{"key": "medico", "value": "1"}]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Turnos (filtrar por paciente)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/turnos?paciente=1",
+              "host": ["{{host}}"],
+              "path": ["turnos"],
+              "query": [{"key": "paciente", "value": "1"}]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Obtener Turno por ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/turnos/1",
+              "host": ["{{host}}"],
+              "path": ["turnos", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Crear Turno",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id_medico\": 1,\r\n    \"id_paciente\": 1,\r\n    \"id_obra_social\": 1,\r\n    \"fecha_hora\": \"2026-07-15T10:00:00\"\r\n}",
+              "options": {"raw": {"language": "json"}}
+            },
+            "url": {
+              "raw": "{{host}}/turnos",
+              "host": ["{{host}}"],
+              "path": ["turnos"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Marcar Turno como Atendido",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/turnos/1/atender",
+              "host": ["{{host}}"],
+              "path": ["turnos", "1", "atender"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Cancelar Turno",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/turnos/1",
+              "host": ["{{host}}"],
+              "path": ["turnos", "1"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Restaurar Turno",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "PATCH",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/turnos/1/restaurar",
+              "host": ["{{host}}"],
+              "path": ["turnos", "1", "restaurar"]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Auditoría",
+      "item": [
+        {
+          "name": "Listar Auditoría",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/auditoria",
+              "host": ["{{host}}"],
+              "path": ["auditoria"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Auditoría (filtros)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/auditoria?email=ferben@correo.com&accion=LOGIN&limite=50",
+              "host": ["{{host}}"],
+              "path": ["auditoria"],
+              "query": [
+                {"key": "email", "value": "ferben@correo.com"},
+                {"key": "accion", "value": "LOGIN"},
+                {"key": "limite", "value": "50"}
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Informes",
+      "item": [
+        {
+          "name": "Informe Totales por Obra Social (mes anterior)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/informes/total_os_anterior",
+              "host": ["{{host}}"],
+              "path": ["informes", "total_os_anterior"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Informe Totales por Especialidad (mes anterior)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/informes/total_es_anterior",
+              "host": ["{{host}}"],
+              "path": ["informes", "total_es_anterior"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Informe Turnos Completados (por mes y año)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/informes/turnos_completados?mes=6&anio=2026",
+              "host": ["{{host}}"],
+              "path": ["informes", "turnos_completados"],
+              "query": [
+                {"key": "mes", "value": "6"},
+                {"key": "anio", "value": "2026"}
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Informe Turnos de Médico (por mes y año)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [{"key": "token", "value": "{{api_token}}", "type": "string"}]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{host}}/informes/turnos_medico?id_medico=1&mes=6&anio=2026",
+              "host": ["{{host}}"],
+              "path": ["informes", "turnos_medico"],
+              "query": [
+                {"key": "id_medico", "value": "1"},
+                {"key": "mes", "value": "6"},
+                {"key": "anio", "value": "2026"}
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}

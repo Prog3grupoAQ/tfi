@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Registro Médico</title>
+</head>
+<body>
+  <h2>Registro de Médico</h2>
+  <form id="form">
+    <p><label>Documento *<br><input name="documento" required></label></p>
+    <p><label>Apellido *<br><input name="apellido" required></label></p>
+    <p><label>Nombres *<br><input name="nombres" required></label></p>
+    <p><label>Email *<br><input name="email" type="email" required></label></p>
+    <p><label>Contraseña *<br><input name="contrasenia" type="password" required></label></p>
+    <p><label>Especialidad *<br>
+      <select name="id_especialidad" required>
+        <option value="">Seleccionar...</option>
+        <option value="1">Pediatría</option>
+        <option value="2">Clinica</option>
+        <option value="3">Traumatología</option>
+        <option value="4">Infectología</option>
+        <option value="5">Ginecología</option>
+        <option value="6">Oftalmología</option>
+        <option value="7">Cardiología</option>
+        <option value="8">Neurología</option>
+        <option value="9">Dermatología</option>
+        <option value="10">Gastroenterología</option>
+        <option value="11">Endocrinología</option>
+        <option value="12">Urología</option>
+        <option value="13">Psiquiatría</option>
+        <option value="14">Reumatología</option>
+        <option value="15">Oncología</option>
+        <option value="16">Otorrinolaringología</option>
+      </select>
+    </label></p>
+    <p><label>Matrícula *<br><input name="matricula" type="number" required></label></p>
+    <p><label>Valor consulta *<br><input name="valor_consulta" type="number" step="0.01" required></label></p>
+    <p><label>Descripción<br><textarea name="descripcion"></textarea></label></p>
+    <p><label>Foto<br><input name="foto" type="file" accept="image/*"></label></p>
+    <p><button type="submit">Registrar</button></p>
+  </form>
+  <p id="msg"></p>
+
+  <script>
+    const API = 'http://localhost:3003/api/v1';
+
+    document.getElementById('form').addEventListener('submit', async e => {
+      e.preventDefault();
+      const body = new FormData(e.target);
+      if (!body.get('descripcion')) body.delete('descripcion');
+      if (!body.get('foto') || body.get('foto').size === 0) body.delete('foto');
+
+      const res = await fetch(`${API}/registro/medico`, { method: 'POST', body });
+      const data = await res.json();
+      const msg = document.getElementById('msg');
+
+      if (res.ok && data.estado !== false) {
+        msg.textContent = 'Médico registrado con éxito.';
+        e.target.reset();
+      } else {
+        msg.textContent = data.errores?.map(e => e.msg).join(', ') || data.mensaje || 'Error al registrar.';
+      }
+    });
+  </script>
+</body>
+</html>
