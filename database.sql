@@ -383,7 +383,7 @@ CREATE TABLE `obras_sociales` (
 
 INSERT INTO `obras_sociales` (`id_obra_social`, `nombre`, `descripcion`, `porcentaje_descuento`, `es_particular`, `activo`) VALUES
 (1, 'Particular', 'Sin prepara u obra social', 0.00, 1, 1),
-(6, 'OSER', 'Obra social provincial de Entre Ríos (sucesora de IOSPER). Brinda cobertura médica a empleados públicos provinciales, jubilados y sus grupos familiares.', 0.20, 0, 1),
+(6, 'OSER', 'Obra social provincial de Entre Ríos (sucesora de IOSPER). Brinda cobertura médica a empleados públicos provinciales, jubilados y sus grupos familiares.', 0.60, 0, 1),
 (7, 'PAMI', 'Instituto Nacional de Servicios Sociales para Jubilados y Pensionados. Ofrece cobertura médica, medicamentos y prestaciones sociales para jubilados y pensionados.', 0.75, 0, 1),
 (8, 'OSDE', 'Organización de Servicios Directos Empresarios. Red nacional de cobertura médica con amplia cartilla de profesionales, clínicas y sanatorios.', 0.50, 0, 1),
 (9, 'OSECAC', 'Obra Social de Empleados de Comercio y Actividades Civiles. Brinda cobertura de salud a trabajadores mercantiles y sus familias.', 0.40, 0, 1),
