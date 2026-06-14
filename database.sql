@@ -802,6 +802,7 @@ CREATE TABLE `v_pacientes` (
 ,`nombres` varchar(100)
 ,`email` varchar(255)
 ,`id_obra_social` int unsigned
+,`nombre_obra_social` varchar(255)
 ,`descripcion_obra_social` varchar(255)
 ,`foto_path` varchar(255)
 );
@@ -928,7 +929,7 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 --
 DROP TABLE IF EXISTS `v_pacientes`;
 
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_pacientes`  AS SELECT `p`.`id_paciente` AS `id_paciente`, `p`.`id_usuario` AS `id_usuario`, `u`.`apellido` AS `apellido`, `u`.`nombres` AS `nombres`, `u`.`email` AS `email`, `os`.`id_obra_social` AS `id_obra_social`, `os`.`descripcion` AS `descripcion_obra_social`, `u`.`foto_path` AS `foto_path` FROM ((`pacientes` `p` join `usuarios` `u` on((`p`.`id_usuario` = `u`.`id_usuario`))) join `obras_sociales` `os` on((`p`.`id_obra_social` = `os`.`id_obra_social`))) WHERE (`u`.`activo` = 1) ;
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_pacientes`  AS SELECT `p`.`id_paciente` AS `id_paciente`, `p`.`id_usuario` AS `id_usuario`, `u`.`apellido` AS `apellido`, `u`.`nombres` AS `nombres`, `u`.`email` AS `email`, `os`.`id_obra_social` AS `id_obra_social`, `os`.`descripcion` AS `descripcion_obra_social`, `os`.`nombre` AS `nombre_obra_social`, `u`.`foto_path` AS `foto_path` FROM ((`pacientes` `p` join `usuarios` `u` on((`p`.`id_usuario` = `u`.`id_usuario`))) join `obras_sociales` `os` on((`p`.`id_obra_social` = `os`.`id_obra_social`))) WHERE (`u`.`activo` = 1) ;
 
 --
 -- Restricciones para tablas volcadas
