@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.3
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: db
--- Tiempo de generación: 13-06-2026 a las 23:14:31
--- Versión del servidor: 8.2.0
--- Versión de PHP: 8.3.31
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 15-06-2026 a las 17:33:57
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `programacion3`
+-- Base de datos: `progra3`
 --
 
 DELIMITER $$
@@ -123,8 +123,8 @@ DELIMITER ;
 -- Estructura de tabla para la tabla `auditoria`
 --
 
-CREATE TABLE IF NOT EXISTS `auditoria` (
-  `id_auditoria` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+CREATE TABLE `auditoria` (
+  `id_auditoria` int(10) UNSIGNED NOT NULL,
   `id_usuario` int(10) UNSIGNED DEFAULT NULL,
   `email` varchar(255) NOT NULL,
   `accion` varchar(500) NOT NULL,
@@ -132,12 +132,16 @@ CREATE TABLE IF NOT EXISTS `auditoria` (
   `endpoint` varchar(500) NOT NULL,
   `status_code` int(3) UNSIGNED DEFAULT NULL,
   `ip` varchar(45) DEFAULT NULL,
-  `fecha_hora` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id_auditoria`),
-  KEY `idx_auditoria_usuario` (`id_usuario`),
-  KEY `idx_auditoria_fecha` (`fecha_hora`)
+  `fecha_hora` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `auditoria`
+--
+
+INSERT INTO `auditoria` (`id_auditoria`, `id_usuario`, `email`, `accion`, `metodo`, `endpoint`, `status_code`, `ip`, `fecha_hora`) VALUES
+(1, 8, 'ferben@correo.com', 'ferben@correo.com inició sesión', 'POST', '/api/v1/auth/login', 200, '::ffff:127.0.0.1', '2026-06-15 12:08:43'),
+(2, 8, 'ferben@correo.com', 'ferben@correo.com accedió a GET /api/v1/obras_sociales', 'GET', '/api/v1/obras_sociales', 200, '::ffff:127.0.0.1', '2026-06-15 12:12:01');
 
 -- --------------------------------------------------------
 
@@ -146,9 +150,9 @@ CREATE TABLE IF NOT EXISTS `auditoria` (
 --
 
 CREATE TABLE `especialidades` (
-  `id_especialidad` int UNSIGNED NOT NULL,
-  `nombre` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `activo` tinyint UNSIGNED NOT NULL DEFAULT '1'
+  `id_especialidad` int(10) UNSIGNED NOT NULL,
+  `nombre` varchar(120) NOT NULL,
+  `activo` tinyint(3) UNSIGNED NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -180,11 +184,11 @@ INSERT INTO `especialidades` (`id_especialidad`, `nombre`, `activo`) VALUES
 --
 
 CREATE TABLE `medicos` (
-  `id_medico` int UNSIGNED NOT NULL,
-  `id_usuario` int UNSIGNED NOT NULL,
-  `id_especialidad` int UNSIGNED NOT NULL,
-  `matricula` int UNSIGNED NOT NULL,
-  `descripcion` text COLLATE utf8mb4_unicode_ci,
+  `id_medico` int(10) UNSIGNED NOT NULL,
+  `id_usuario` int(10) UNSIGNED NOT NULL,
+  `id_especialidad` int(10) UNSIGNED NOT NULL,
+  `matricula` int(10) UNSIGNED NOT NULL,
+  `descripcion` text DEFAULT NULL,
   `valor_consulta` decimal(10,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -227,10 +231,10 @@ INSERT INTO `medicos` (`id_medico`, `id_usuario`, `id_especialidad`, `matricula`
 --
 
 CREATE TABLE `medicos_obras_sociales` (
-  `id_medico_obra_social` int UNSIGNED NOT NULL,
-  `id_medico` int UNSIGNED NOT NULL,
-  `id_obra_social` int UNSIGNED NOT NULL,
-  `activo` tinyint UNSIGNED NOT NULL DEFAULT '1'
+  `id_medico_obra_social` int(10) UNSIGNED NOT NULL,
+  `id_medico` int(10) UNSIGNED NOT NULL,
+  `id_obra_social` int(10) UNSIGNED NOT NULL,
+  `activo` tinyint(3) UNSIGNED NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -369,12 +373,12 @@ INSERT INTO `medicos_obras_sociales` (`id_medico_obra_social`, `id_medico`, `id_
 --
 
 CREATE TABLE `obras_sociales` (
-  `id_obra_social` int UNSIGNED NOT NULL,
-  `nombre` varchar(120) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `descripcion` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `id_obra_social` int(10) UNSIGNED NOT NULL,
+  `nombre` varchar(120) NOT NULL,
+  `descripcion` varchar(255) NOT NULL,
   `porcentaje_descuento` decimal(9,2) NOT NULL,
-  `es_particular` tinyint UNSIGNED NOT NULL DEFAULT '0',
-  `activo` tinyint UNSIGNED NOT NULL DEFAULT '1'
+  `es_particular` tinyint(3) UNSIGNED NOT NULL DEFAULT 0,
+  `activo` tinyint(3) UNSIGNED NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -410,9 +414,9 @@ INSERT INTO `obras_sociales` (`id_obra_social`, `nombre`, `descripcion`, `porcen
 --
 
 CREATE TABLE `pacientes` (
-  `id_paciente` int UNSIGNED NOT NULL,
-  `id_usuario` int UNSIGNED NOT NULL,
-  `id_obra_social` int UNSIGNED NOT NULL
+  `id_paciente` int(10) UNSIGNED NOT NULL,
+  `id_usuario` int(10) UNSIGNED NOT NULL,
+  `id_obra_social` int(10) UNSIGNED NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -488,14 +492,14 @@ INSERT INTO `pacientes` (`id_paciente`, `id_usuario`, `id_obra_social`) VALUES
 --
 
 CREATE TABLE `turnos_reservas` (
-  `id_turno_reserva` int UNSIGNED NOT NULL,
-  `id_medico` int UNSIGNED NOT NULL,
-  `id_paciente` int UNSIGNED NOT NULL,
-  `id_obra_social` int UNSIGNED NOT NULL,
+  `id_turno_reserva` int(10) UNSIGNED NOT NULL,
+  `id_medico` int(10) UNSIGNED NOT NULL,
+  `id_paciente` int(10) UNSIGNED NOT NULL,
+  `id_obra_social` int(10) UNSIGNED NOT NULL,
   `fecha_hora` datetime NOT NULL,
   `valor_total` decimal(10,2) NOT NULL,
-  `atendido` tinyint UNSIGNED NOT NULL,
-  `activo` tinyint UNSIGNED NOT NULL DEFAULT '1'
+  `atendido` tinyint(3) UNSIGNED NOT NULL,
+  `activo` tinyint(3) UNSIGNED NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -668,15 +672,15 @@ INSERT INTO `turnos_reservas` (`id_turno_reserva`, `id_medico`, `id_paciente`, `
 --
 
 CREATE TABLE `usuarios` (
-  `id_usuario` int UNSIGNED NOT NULL,
-  `documento` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `apellido` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `nombres` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `contrasenia` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `foto_path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `rol` tinyint UNSIGNED NOT NULL,
-  `activo` tinyint UNSIGNED NOT NULL DEFAULT '1'
+  `id_usuario` int(10) UNSIGNED NOT NULL,
+  `documento` varchar(20) NOT NULL,
+  `apellido` varchar(100) NOT NULL,
+  `nombres` varchar(100) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `contrasenia` varchar(255) NOT NULL,
+  `foto_path` varchar(255) NOT NULL,
+  `rol` tinyint(3) UNSIGNED NOT NULL,
+  `activo` tinyint(3) UNSIGNED NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -781,8 +785,8 @@ INSERT INTO `usuarios` (`id_usuario`, `documento`, `apellido`, `nombres`, `email
 -- (Véase abajo para la vista actual)
 --
 CREATE TABLE `v_medicos` (
-`id_medico` int unsigned
-,`id_usuario` int unsigned
+`id_medico` int(10) unsigned
+,`id_usuario` int(10) unsigned
 ,`apellido` varchar(100)
 ,`nombres` varchar(100)
 ,`email` varchar(255)
@@ -792,24 +796,73 @@ CREATE TABLE `v_medicos` (
 -- --------------------------------------------------------
 
 --
+-- Estructura Stand-in para la vista `v_medicos_os`
+-- (Véase abajo para la vista actual)
+--
+CREATE TABLE `v_medicos_os` (
+`nombres` varchar(100)
+,`apellido` varchar(100)
+,`id_medico` int(10) unsigned
+,`ids_obras_sociales` mediumtext
+,`nombres_obras_sociales` mediumtext
+);
+
+-- --------------------------------------------------------
+
+--
 -- Estructura Stand-in para la vista `v_pacientes`
 -- (Véase abajo para la vista actual)
 --
 CREATE TABLE `v_pacientes` (
-`id_paciente` int unsigned
-,`id_usuario` int unsigned
+`id_paciente` int(10) unsigned
+,`id_usuario` int(10) unsigned
 ,`apellido` varchar(100)
 ,`nombres` varchar(100)
 ,`email` varchar(255)
-,`id_obra_social` int unsigned
-,`nombre_obra_social` varchar(255)
+,`id_obra_social` int(10) unsigned
 ,`descripcion_obra_social` varchar(255)
+,`nombre_obra_social` varchar(120)
 ,`foto_path` varchar(255)
 );
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `v_medicos`
+--
+DROP TABLE IF EXISTS `v_medicos`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_medicos`  AS SELECT `m`.`id_medico` AS `id_medico`, `m`.`id_usuario` AS `id_usuario`, `u`.`apellido` AS `apellido`, `u`.`nombres` AS `nombres`, `u`.`email` AS `email`, `u`.`foto_path` AS `foto_path` FROM (`medicos` `m` join `usuarios` `u` on(`m`.`id_usuario` = `u`.`id_usuario`)) WHERE `u`.`activo` = 1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `v_medicos_os`
+--
+DROP TABLE IF EXISTS `v_medicos_os`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_medicos_os`  AS SELECT `u`.`nombres` AS `nombres`, `u`.`apellido` AS `apellido`, `m`.`id_medico` AS `id_medico`, group_concat(`os`.`id_obra_social` order by `os`.`id_obra_social` ASC separator ',') AS `ids_obras_sociales`, group_concat(`os`.`nombre` order by `os`.`nombre` ASC separator ',') AS `nombres_obras_sociales` FROM (((`medicos` `m` join `medicos_obras_sociales` `mo` on(`m`.`id_medico` = `mo`.`id_medico` and `mo`.`activo` = 1)) join `obras_sociales` `os` on(`os`.`id_obra_social` = `mo`.`id_obra_social` and `os`.`activo` = 1)) join `usuarios` `u` on(`u`.`id_usuario` = `m`.`id_usuario` and `u`.`activo` = 1)) WHERE `u`.`activo` = 1 GROUP BY `m`.`id_medico`, `u`.`nombres`, `u`.`apellido` ;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura para la vista `v_pacientes`
+--
+DROP TABLE IF EXISTS `v_pacientes`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_pacientes`  AS SELECT `p`.`id_paciente` AS `id_paciente`, `p`.`id_usuario` AS `id_usuario`, `u`.`apellido` AS `apellido`, `u`.`nombres` AS `nombres`, `u`.`email` AS `email`, `os`.`id_obra_social` AS `id_obra_social`, `os`.`descripcion` AS `descripcion_obra_social`, `os`.`nombre` AS `nombre_obra_social`, `u`.`foto_path` AS `foto_path` FROM ((`pacientes` `p` join `usuarios` `u` on(`p`.`id_usuario` = `u`.`id_usuario`)) join `obras_sociales` `os` on(`p`.`id_obra_social` = `os`.`id_obra_social`)) WHERE `u`.`activo` = 1 ;
 
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `auditoria`
+--
+ALTER TABLE `auditoria`
+  ADD PRIMARY KEY (`id_auditoria`),
+  ADD KEY `idx_auditoria_usuario` (`id_usuario`),
+  ADD KEY `idx_auditoria_fecha` (`fecha_hora`);
 
 --
 -- Indices de la tabla `especialidades`
@@ -872,64 +925,52 @@ ALTER TABLE `usuarios`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `auditoria`
+--
+ALTER TABLE `auditoria`
+  MODIFY `id_auditoria` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT de la tabla `especialidades`
 --
 ALTER TABLE `especialidades`
-  MODIFY `id_especialidad` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id_especialidad` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `medicos`
 --
 ALTER TABLE `medicos`
-  MODIFY `id_medico` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id_medico` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de la tabla `medicos_obras_sociales`
 --
 ALTER TABLE `medicos_obras_sociales`
-  MODIFY `id_medico_obra_social` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
+  MODIFY `id_medico_obra_social` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=127;
 
 --
 -- AUTO_INCREMENT de la tabla `obras_sociales`
 --
 ALTER TABLE `obras_sociales`
-  MODIFY `id_obra_social` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id_obra_social` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT de la tabla `pacientes`
 --
 ALTER TABLE `pacientes`
-  MODIFY `id_paciente` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `id_paciente` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
 -- AUTO_INCREMENT de la tabla `turnos_reservas`
 --
 ALTER TABLE `turnos_reservas`
-  MODIFY `id_turno_reserva` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=165;
+  MODIFY `id_turno_reserva` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=165;
 
 --
 -- AUTO_INCREMENT de la tabla `usuarios`
 --
 ALTER TABLE `usuarios`
-  MODIFY `id_usuario` int UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
-
--- --------------------------------------------------------
-
---
--- Estructura para la vista `v_medicos`
---
-DROP TABLE IF EXISTS `v_medicos`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_medicos`  AS SELECT `m`.`id_medico` AS `id_medico`, `m`.`id_usuario` AS `id_usuario`, `u`.`apellido` AS `apellido`, `u`.`nombres` AS `nombres`, `u`.`email` AS `email`, `u`.`foto_path` AS `foto_path` FROM (`medicos` `m` join `usuarios` `u` on((`m`.`id_usuario` = `u`.`id_usuario`))) WHERE (`u`.`activo` = 1) ;
-
--- --------------------------------------------------------
-
---
--- Estructura para la vista `v_pacientes`
---
-DROP TABLE IF EXISTS `v_pacientes`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `v_pacientes`  AS SELECT `p`.`id_paciente` AS `id_paciente`, `p`.`id_usuario` AS `id_usuario`, `u`.`apellido` AS `apellido`, `u`.`nombres` AS `nombres`, `u`.`email` AS `email`, `os`.`id_obra_social` AS `id_obra_social`, `os`.`descripcion` AS `descripcion_obra_social`, `os`.`nombre` AS `nombre_obra_social`, `u`.`foto_path` AS `foto_path` FROM ((`pacientes` `p` join `usuarios` `u` on((`p`.`id_usuario` = `u`.`id_usuario`))) join `obras_sociales` `os` on((`p`.`id_obra_social` = `os`.`id_obra_social`))) WHERE (`u`.`activo` = 1) ;
+  MODIFY `id_usuario` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=97;
 
 --
 -- Restricciones para tablas volcadas
