@@ -79,7 +79,7 @@ export class MedicosDatabase {
         );
         if (os.length === 0) {
           await connection.rollback();
-          return null;
+          return { error: `Obra social con id ${id_obra_social} no encontrada o inactiva` };
         }
       }
 

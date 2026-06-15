@@ -110,8 +110,8 @@ export class MedicosController {
 
       const resultado = await this.medicos.asociarObrasSociales(id_medico, obras_sociales);
 
-      if (!resultado)
-        return res.status(400).json({ estado: false, msg: "No se crearon las relaciones" });
+      if (!resultado || resultado.error)
+        return res.status(400).json({ estado: false, msg: resultado?.error ?? "No se crearon las relaciones" });
 
       return res.status(201).json({ estado: true, msg: "Médico y obras sociales relacionadas" });
     } catch (error) {
