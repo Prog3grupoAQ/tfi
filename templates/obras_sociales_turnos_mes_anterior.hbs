@@ -6,23 +6,27 @@
     <style>
       body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
       .container { padding: 20px; }
-      h1 { font-size: 18px; margin-bottom: 8px; }
+      h1 { font-size: 18px; margin-bottom: 4px; }
       .meta { font-size: 12px; color: #666; margin-bottom: 20px; }
       table { width: 100%; border-collapse: collapse; margin-top: 12px; }
-      th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-      th { background: #f4f4f4; }
+      th, td { border: 1px solid #ddd; padding: 7px 8px; text-align: left; font-size: 12px; }
+      th { background: #f4f4f4; font-size: 12px; }
       tbody tr:nth-child(even) { background: #fbfbfb; }
+      .totales td { font-weight: bold; background: #f0f0f0; border-top: 2px solid #bbb; }
+      .sin-datos { color: #888; font-size: 13px; margin-top: 20px; }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
     <div class="container">
       <h1>{{titulo}}</h1>
+      <div class="meta">Período: {{fecha}} &nbsp;|&nbsp; {{leyenda}}</div>
+
       <div style="max-width:900px; height:320px; margin-top:20px;">
         <canvas id="obrasSocialesChart"></canvas>
       </div>
-      <div style="margin-top:20px">Tabla de detalles</div>
 
+      {{#if filas.length}}
       <table>
         <thead>
           <tr>
@@ -38,7 +42,16 @@
             </tr>
           {{/each}}
         </tbody>
+        <tfoot>
+          <tr class="totales">
+            <td>Total de turnos</td>
+            <td>{{totalTurnos}}</td>
+          </tr>
+        </tfoot>
       </table>
+      {{else}}
+        <p class="sin-datos">No se registraron turnos para el período seleccionado.</p>
+      {{/if}}
     </div>
 
     <script>

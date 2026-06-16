@@ -13,11 +13,13 @@ export class InformesService {
 
   reportePorObrasSociales = async () => {
     const datos = await this.informesDb.porObrasSociales();
+    const totalTurnos = datos.reduce((acc, r) => acc + parseInt(r.cantidad_turnos), 0);
     const buffer = await generarPdfDesdeTemplate("obras_sociales_turnos_mes_anterior.hbs", {
       titulo: "Informe de turnos por obra social",
       fecha: this.mesAnterior,
       columnas: ["obra_social", "cantidad_turnos"],
       filas: datos,
+      totalTurnos,
       leyenda: `Cantidad de turnos atendidos en el mes de ${this.mesAnterior} por obra social`
     });
 
@@ -32,11 +34,13 @@ export class InformesService {
 
   reportePorEspecialidades = async () => {
     const datos = await this.informesDb.porEspecialidades();
+    const totalTurnos = datos.reduce((acc, r) => acc + parseInt(r.cantidad_turnos), 0);
     const buffer = await generarPdfDesdeTemplate("especialidades_turnos_mes_anterior.hbs", {
       titulo: "Informe de turnos por especialidad",
       fecha: this.mesAnterior,
       columnas: ["especialidad", "cantidad_turnos"],
       filas: datos,
+      totalTurnos,
       leyenda: `Cantidad de turnos atendidos en el mes de ${this.mesAnterior} por especialidad`
     });
 
